@@ -1,1298 +1,1049 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="version" content="1782217760">
-  <title>中餐厅菜单</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e8e5f5 40%, #f0edf8 70%, #f5f7fa 100%);
-      background-attachment: fixed;
-      min-height: 100vh;
-      color: #2c3e50;
-    }
-    /* ── 顶部 ── */
-    .header {
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(139,92,246,0.15);
-      padding: 20px 16px 14px;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .header h1 {
-      font-size: clamp(1.6rem, 5vw, 2.6rem);
-      font-weight: 800;
-      background: linear-gradient(90deg, #8B5CF6, #EC4899, #8B5CF6);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 3s linear infinite;
-    }
-    @keyframes shimmer { to { background-position: 200% center; } }
-    .header .subtitle {
-      font-size: clamp(0.82rem, 2vw, 1rem);
-      color: #7c6fa0;
-      margin-top: 4px;
-    }
-    /* ── 搜索 ── */
-    .search-wrap {
-      max-width: 600px;
-      margin: 16px auto 0;
-      padding: 0 16px;
-    }
-    .search-input {
-      width: 100%;
-      padding: 10px 16px;
-      border: 2px solid rgba(139,92,246,0.3);
-      border-radius: 50px;
-      font-size: 1rem;
-      outline: none;
-      background: rgba(255,255,255,0.9);
-      transition: border-color .2s;
-    }
-    .search-input:focus { border-color: #8B5CF6; }
-    .search-count { text-align:center; font-size:0.85rem; color:#7c6fa0; margin-top:6px; }
-    /* ── 分类导航 ── */
-    .nav-wrap {
-      max-width: 1200px;
-      margin: 14px auto 0;
-      padding: 0 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-    .nav-btn {
-      padding: 6px 14px;
-      border: 1.5px solid rgba(139,92,246,0.4);
-      border-radius: 20px;
-      background: rgba(255,255,255,0.7);
-      color: #6d4fc7;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all .2s;
-      white-space: nowrap;
-    }
-    .nav-btn:hover, .nav-btn.active {
-      background: linear-gradient(135deg, #8B5CF6, #EC4899);
-      color: #fff;
-      border-color: transparent;
-    }
-    /* ── 主内容 ── */
-    .main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 80px; }
-    /* ── 分类区块 ── */
-    .category-section { margin-bottom: 36px; }
-    .category-title {
-      font-size: clamp(1.1rem, 3vw, 1.5rem);
-      font-weight: 700;
-      color: #5b3fa6;
-      padding: 10px 0 12px;
-      border-bottom: 2px solid rgba(139,92,246,0.2);
-      margin-bottom: 16px;
-    }
-    .cat-count { font-size: 0.85rem; color: #a78bfa; font-weight: 400; }
-    /* ── 菜品网格 ── */
-    .dish-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 12px;
-    }
-    .dish-card {
-      background: rgba(255,255,255,0.85);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(139,92,246,0.1);
-      transition: transform .25s, box-shadow .25s;
-      cursor: pointer;
-    }
-    .dish-card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 24px rgba(139,92,246,0.2);
-    }
-    .dish-img-wrap {
-      width: 100%;
-      aspect-ratio: 4/3;
-      overflow: hidden;
-      background: #f0edf8;
-    }
-    .dish-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .3s;
-    }
-    .dish-card:hover .dish-img { transform: scale(1.06); }
-    .no-img-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #ede9fe, #fce7f3);
-      color: #7c6fa0;
-      font-size: 0.85rem;
-      text-align: center;
-      padding: 8px;
-    }
-    .dish-info { padding: 10px 12px; }
-    .dish-name {
-      font-size: clamp(0.82rem, 2vw, 0.95rem);
-      font-weight: 600;
-      color: #2c3e50;
-      margin-bottom: 4px;
-      line-height: 1.3;
-    }
-    .dish-price {
-      font-size: clamp(0.88rem, 2vw, 1rem);
-      font-weight: 700;
-      background: linear-gradient(90deg, #8B5CF6, #EC4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    /* ── 无图片列表 ── */
-    .dish-list {
-      background: rgba(255,255,255,0.6);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(139,92,246,0.1);
-    }
-    .dish-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 11px 16px;
-      border-bottom: 1px solid rgba(139,92,246,0.08);
-      transition: background .15s;
-    }
-    .dish-row:last-child { border-bottom: none; }
-    .dish-row:hover { background: rgba(139,92,246,0.05); }
-    .dish-name-text { font-size: 0.95rem; color: #2c3e50; }
-    .dish-price-text {
-      font-size: 0.95rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #8B5CF6, #EC4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-left: 12px;
-      white-space: nowrap;
-    }
-    /* ── 无结果 ── */
-    .no-result { text-align:center; color:#a78bfa; padding:40px; font-size:1rem; display:none; }
-    /* ── 回顶部 ── */
-    .back-to-top {
-      position: fixed;
-      bottom: 28px;
-      right: 24px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #8B5CF6, #EC4899);
-      color: #fff;
-      font-size: 1.4rem;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(139,92,246,0.4);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: transform .2s, opacity .2s;
-      z-index: 200;
-    }
-    .back-to-top:hover { transform: translateY(-3px); }
-    /* ── 手机适配 ── */
-    @media (max-width: 600px) {
-      .dish-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .dish-card { border-radius: 10px; }
-      .dish-info { padding: 7px 9px; }
-      .back-to-top { bottom: 20px; right: 16px; width: 42px; height: 42px; font-size: 1.2rem; }
-    }
-    @media (max-width: 400px) {
-      .dish-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>中餐厅菜单</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+.header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    color: white;
+}
+.header h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    margin-bottom: 8px;
+}
+.header .subtitle {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    opacity: 0.9;
+}
+.search-box {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+}
+.search-box input {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 50px;
+    border: none;
+    font-size: 1rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    outline: none;
+    background: rgba(255,255,255,0.95);
+}
+.search-box input:focus {
+    box-shadow: 0 4px 25px rgba(0,0,0,0.25);
+}
+.nav-bar {
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+.nav-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.nav-btn:hover, .nav-btn.active {
+    background: white;
+    color: #764ba2;
+    font-weight: 600;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px 80px;
+}
+.category-section {
+    margin-bottom: 35px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+.category-title {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 14px 24px;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.category-title::before {
+    content: '🍽️';
+    font-size: 1.1em;
+}
+.dishes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1px;
+    background: #f0f0f0;
+}
+.dish-card {
+    background: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+.dish-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 1;
+    position: relative;
+}
+.dish-card img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    display: block;
+}
+.dish-info {
+    padding: 10px 12px;
+}
+.dish-name {
+    font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.dish-price {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 700;
+    color: #764ba2;
+}
+/* 无图片菜品列表 */
+.dishes-list {
+    padding: 8px 0;
+}
+.dish-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.15s;
+}
+.dish-list-item:last-child { border-bottom: none; }
+.dish-list-item:hover { background: #f9f7ff; }
+.dish-list-name {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    color: #444;
+    font-weight: 500;
+}
+.dish-list-price {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    font-weight: 700;
+    color: #764ba2;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+/* 搜索结果统计 */
+.search-stats {
+    text-align: center;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    min-height: 22px;
+}
+/* 无结果提示 */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.8);
+    font-size: 1.1rem;
+    display: none;
+}
+/* 回顶部按钮 */
+.back-top {
+    position: fixed;
+    bottom: 25px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 15px rgba(102,126,234,0.5);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 999;
+    border: none;
+}
+.back-top.show { opacity: 1; }
+.back-top:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(102,126,234,0.6); }
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .dishes-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    .header { padding: 20px 15px 15px; }
+}
+@media (max-width: 480px) {
+    .dishes-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-btn { padding: 6px 12px; font-size: 0.8rem; }
+    .dish-list-item { padding: 10px 16px; }
+}
+@media (max-width: 360px) {
+    .dishes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 </head>
 <body>
-
-<header class="header">
+<div class="header">
   <h1>🍽️ 中餐厅菜单</h1>
-  <p class="subtitle">❤️ 欢迎点餐 ❤️ 提前一天预定</p>
-  <div class="search-wrap">
-    <input class="search-input" id="searchInput" type="text" placeholder="🔍 搜索菜品名称或价格..." oninput="doSearch()">
-    <div class="search-count" id="searchCount"></div>
-  </div>
-</header>
-
-<div class="nav-wrap" id="navWrap">
-<button class="nav-btn" onclick="scrollToSection('精美凉菜')">精美凉菜</button>
-<button class="nav-btn" onclick="scrollToSection('营养蔬菜')">营养蔬菜</button>
-<button class="nav-btn" onclick="scrollToSection('川菜小炒')">川菜小炒</button>
-<button class="nav-btn" onclick="scrollToSection('养生汤')">养生汤</button>
-<button class="nav-btn" onclick="scrollToSection('主食类')">主食类</button>
-<button class="nav-btn" onclick="scrollToSection('烧烤牛羊类')">烧烤牛羊类</button>
-<button class="nav-btn" onclick="scrollToSection('烧烤鸡货类')">烧烤鸡货类</button>
-<button class="nav-btn" onclick="scrollToSection('烧烤猪肉类')">烧烤猪肉类</button>
-<button class="nav-btn" onclick="scrollToSection('烧烤海鲜类')">烧烤海鲜类</button>
-<button class="nav-btn" onclick="scrollToSection('烧烤蔬菜类')">烧烤蔬菜类</button>
-<button class="nav-btn" onclick="scrollToSection('烤肠类')">烤肠类</button>
-<button class="nav-btn" onclick="scrollToSection('锡纸盒类')">锡纸盒类</button>
-
+  <div class="subtitle">❤️ 欢迎点餐 ❤️ 提前一天预定</div>
 </div>
 
-<main class="main" id="mainContent">
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="🔍 搜索菜品名称或价格..." oninput="doSearch()">
+</div>
+<div class="search-stats" id="searchStats"></div>
 
-<section class="category-section" id="cat-精美凉菜">
-  <h2 class="category-title">精美凉菜 <span class="cat-count">(7)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="凉拌鸡" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_凉拌鸡.jpg" alt="凉拌鸡" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>凉拌鸡</div>'">
-      </div>
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn" onclick="scrollToCategory('精美凉菜')">精美凉菜</button>
+  <button class="nav-btn" onclick="scrollToCategory('营养蔬菜')">营养蔬菜</button>
+  <button class="nav-btn" onclick="scrollToCategory('川菜小炒')">川菜小炒</button>
+  <button class="nav-btn" onclick="scrollToCategory('养生汤')">养生汤</button>
+  <button class="nav-btn" onclick="scrollToCategory('主食类')">主食类</button>
+  <button class="nav-btn" onclick="scrollToCategory('烧烤牛羊类')">烧烤牛羊类</button>
+  <button class="nav-btn" onclick="scrollToCategory('烧烤鸡货类')">烧烤鸡货类</button>
+  <button class="nav-btn" onclick="scrollToCategory('烧烤猪肉类')">烧烤猪肉类</button>
+  <button class="nav-btn" onclick="scrollToCategory('烧烤海鲜类')">烧烤海鲜类</button>
+  <button class="nav-btn" onclick="scrollToCategory('烧烤蔬菜类')">烧烤蔬菜类</button>
+  <button class="nav-btn" onclick="scrollToCategory('烤肠类')">烤肠类</button>
+  <button class="nav-btn" onclick="scrollToCategory('锡纸盒类')">锡纸盒类</button>
+</div>
+<div class="container" id="mainContainer">
+<div class="category-section" id="cat-精美凉菜" data-category="精美凉菜">
+  <div class="category-title">精美凉菜 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(7道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="凉拌鸡" data-price="25">
+      <img src="images/user_凉拌鸡.jpg" alt="凉拌鸡" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">凉拌鸡</div>
-        <div class="dish-price">$24</div>
+        <div class="dish-price">$25</div>
       </div>
     </div>
-    <div class="dish-card" data-name="凉拌牛肉" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_凉拌牛肉.jpg" alt="凉拌牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>凉拌牛肉</div>'">
-      </div>
+    <div class="dish-card" data-name="凉拌牛肉" data-price="25">
+      <img src="images/user_凉拌牛肉.jpg" alt="凉拌牛肉" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">凉拌牛肉</div>
-        <div class="dish-price">$24</div>
+        <div class="dish-price">$25</div>
       </div>
     </div>
-    <div class="dish-card" data-name="卤肉拼盘" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/baochao_yaohua.jpg" alt="卤肉拼盘" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>卤肉拼盘</div>'">
-      </div>
+    <div class="dish-card" data-name="卤肉拼盘" data-price="25">
+      <img src="images/卤肉拼盘.png" alt="卤肉拼盘" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">卤肉拼盘</div>
-        <div class="dish-price">$24</div>
+        <div class="dish-price">$25</div>
       </div>
     </div>
-    <div class="dish-card" data-name="自贡冷吃牛肉" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_自贡冷吃牛肉.jpg" alt="自贡冷吃牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>自贡冷吃牛肉</div>'">
-      </div>
+    <div class="dish-card" data-name="自贡冷吃牛肉" data-price="21">
+      <img src="images/user_自贡冷吃牛肉.jpg" alt="自贡冷吃牛肉" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">自贡冷吃牛肉</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
-    <div class="dish-card" data-name="蒜蓉黄瓜" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_蒜蓉黄瓜.jpg" alt="蒜蓉黄瓜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蒜蓉黄瓜</div>'">
-      </div>
+    <div class="dish-card" data-name="蒜蓉黄瓜" data-price="11">
+      <img src="images/user_蒜蓉黄瓜.jpg" alt="蒜蓉黄瓜" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">蒜蓉黄瓜</div>
-        <div class="dish-price">$10</div>
+        <div class="dish-price">$11</div>
       </div>
     </div>
-    <div class="dish-card" data-name="油炸花生" data-price="$8">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_油炸花生.jpg" alt="油炸花生" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>油炸花生</div>'">
-      </div>
+    <div class="dish-card" data-name="油炸花生" data-price="8">
+      <img src="images/user_油炸花生.jpg" alt="油炸花生" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">油炸花生</div>
         <div class="dish-price">$8</div>
       </div>
     </div>
-    <div class="dish-card" data-name="特色泡菜" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/cai_juan.jpg" alt="特色泡菜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>特色泡菜</div>'">
-      </div>
+    <div class="dish-card" data-name="特色泡菜" data-price="4">
+      <img src="images/特色泡菜.png" alt="特色泡菜" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">特色泡菜</div>
         <div class="dish-price">$4</div>
       </div>
     </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-营养蔬菜">
-  <h2 class="category-title">营养蔬菜 <span class="cat-count">(8)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="干锅土豆片" data-price="$16">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_干锅土豆片.jpg" alt="干锅土豆片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>干锅土豆片</div>'">
-      </div>
+<div class="category-section" id="cat-营养蔬菜" data-category="营养蔬菜">
+  <div class="category-title">营养蔬菜 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(8道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="干锅土豆片" data-price="17">
+      <img src="images/user_干锅土豆片.jpg" alt="干锅土豆片" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">干锅土豆片</div>
-        <div class="dish-price">$16</div>
+        <div class="dish-price">$17</div>
       </div>
     </div>
-    <div class="dish-card" data-name="韭菜鸡蛋" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_韭菜鸡蛋.jpg" alt="韭菜鸡蛋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>韭菜鸡蛋</div>'">
-      </div>
+    <div class="dish-card" data-name="韭菜鸡蛋" data-price="14">
+      <img src="images/韭菜.png" alt="韭菜鸡蛋" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">韭菜鸡蛋</div>
-        <div class="dish-price">$13</div>
+        <div class="dish-price">$14</div>
       </div>
     </div>
-    <div class="dish-card" data-name="酸辣土豆丝" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/chicken_neck_bbq.jpg" alt="酸辣土豆丝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>酸辣土豆丝</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">酸辣土豆丝</div>
-        <div class="dish-price">$13</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="鱼香茄子" data-price="$22">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鱼香茄子.jpg" alt="鱼香茄子" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼香茄子</div>'">
-      </div>
+    <div class="dish-card" data-name="鱼香茄子" data-price="23">
+      <img src="images/茄子.png" alt="鱼香茄子" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">鱼香茄子</div>
-        <div class="dish-price">$22</div>
+        <div class="dish-price">$23</div>
       </div>
     </div>
-    <div class="dish-card" data-name="蚂蚁上树" data-price="$16">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_蚂蚁上树.jpg" alt="蚂蚁上树" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蚂蚁上树</div>'">
-      </div>
+    <div class="dish-card" data-name="蚂蚁上树" data-price="17">
+      <img src="images/user_蚂蚁上树.jpg" alt="蚂蚁上树" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">蚂蚁上树</div>
-        <div class="dish-price">$16</div>
+        <div class="dish-price">$17</div>
       </div>
     </div>
-    <div class="dish-card" data-name="西红柿鸡蛋" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_西红柿鸡蛋.jpg" alt="西红柿鸡蛋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>西红柿鸡蛋</div>'">
-      </div>
+    <div class="dish-card" data-name="西红柿鸡蛋" data-price="14">
+      <img src="images/user_西红柿鸡蛋.jpg" alt="西红柿鸡蛋" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">西红柿鸡蛋</div>
-        <div class="dish-price">$13</div>
+        <div class="dish-price">$14</div>
       </div>
     </div>
-    <div class="dish-card" data-name="小炒时蔬" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_小炒时蔬.jpg" alt="小炒时蔬" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小炒时蔬</div>'">
-      </div>
+    <div class="dish-card" data-name="小炒时蔬" data-price="21">
+      <img src="images/user_小炒时蔬.jpg" alt="小炒时蔬" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">小炒时蔬</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
-</div><div class="dish-list">
-    <div class="dish-row" data-name="酸辣莲白" data-price="$10">
-      <span class="dish-name-text">酸辣莲白</span>
-      <span class="dish-price-text">$10</span>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="酸辣莲白" data-price="11">
+      <span class="dish-list-name">酸辣莲白</span>
+      <span class="dish-list-price">$11</span>
     </div>
+    <div class="dish-list-item" data-name="酸辣土豆丝" data-price="14">
+      <span class="dish-list-name">酸辣土豆丝</span>
+      <span class="dish-list-price">$14</span>
+    </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-川菜小炒">
-  <h2 class="category-title">川菜小炒 <span class="cat-count">(23)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="爆炒鲜墨鱼" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_爆炒鲜墨鱼.jpg" alt="爆炒鲜墨鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>爆炒鲜墨鱼</div>'">
-      </div>
+<div class="category-section" id="cat-川菜小炒" data-category="川菜小炒">
+  <div class="category-title">川菜小炒 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(23道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="爆炒鲜墨鱼" data-price="31">
+      <img src="images/user_爆炒鲜墨鱼.jpg" alt="爆炒鲜墨鱼" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">爆炒鲜墨鱼</div>
-        <div class="dish-price">$29</div>
+        <div class="dish-price">$31</div>
       </div>
     </div>
-    <div class="dish-card" data-name="香辣蟹" data-price="$38">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_香辣蟹.jpg" alt="香辣蟹" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>香辣蟹</div>'">
-      </div>
+    <div class="dish-card" data-name="香辣蟹" data-price="40">
+      <img src="images/user_香辣蟹.jpg" alt="香辣蟹" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">香辣蟹</div>
-        <div class="dish-price">$38</div>
+        <div class="dish-price">$40</div>
       </div>
     </div>
-    <div class="dish-card" data-name="毛血旺" data-price="$38">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/dry_pot_potato.jpg" alt="毛血旺" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>毛血旺</div>'">
-      </div>
+    <div class="dish-card" data-name="毛血旺" data-price="40">
+      <img src="images/毛血旺.png" alt="毛血旺" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">毛血旺</div>
-        <div class="dish-price">$38</div>
+        <div class="dish-price">$40</div>
       </div>
     </div>
-    <div class="dish-card" data-name="清蒸黄花鱼" data-price="$33">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/egg_fried_rice.jpg" alt="清蒸黄花鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>清蒸黄花鱼</div>'">
-      </div>
+    <div class="dish-card" data-name="清蒸黄花鱼" data-price="35">
+      <img src="images/清蒸黄花鱼.png" alt="清蒸黄花鱼" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">清蒸黄花鱼</div>
-        <div class="dish-price">$33</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="酸菜鱼" data-price="$38">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/fan_qie_ji_dan_tang.jpg" alt="酸菜鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>酸菜鱼</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">酸菜鱼</div>
-        <div class="dish-price">$38</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="避风塘大暴龙" data-price="$47">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/fei_chang.jpg" alt="避风塘大暴龙" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>避风塘大暴龙</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">避风塘大暴龙</div>
-        <div class="dish-price">$47</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="火爆牛肝" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_火爆牛肝.jpg" alt="火爆牛肝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>火爆牛肝</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">火爆牛肝</div>
-        <div class="dish-price">$24</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="爆炒腰花" data-price="$38">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_爆炒腰花.jpg" alt="爆炒腰花" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>爆炒腰花</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">爆炒腰花</div>
-        <div class="dish-price">$38</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="黄豆烧猪蹄" data-price="$33">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_黄豆烧猪蹄.jpg" alt="黄豆烧猪蹄" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>黄豆烧猪蹄</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">黄豆烧猪蹄</div>
-        <div class="dish-price">$33</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="蒜香排骨" data-price="$33">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/gan_guo_tu_dou_pian.jpg" alt="蒜香排骨" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蒜香排骨</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">蒜香排骨</div>
-        <div class="dish-price">$33</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="梅香扣肉" data-price="$33">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_梅香扣肉.jpg" alt="梅香扣肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>梅香扣肉</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">梅香扣肉</div>
-        <div class="dish-price">$33</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="双椒牛肉丝" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_双椒牛肉丝.jpg" alt="双椒牛肉丝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>双椒牛肉丝</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">双椒牛肉丝</div>
-        <div class="dish-price">$29</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="小炒肉" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_小炒肉.jpg" alt="小炒肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小炒肉</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">小炒肉</div>
-        <div class="dish-price">$24</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="回锅肉" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_回锅肉.jpg" alt="回锅肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>回锅肉</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">回锅肉</div>
-        <div class="dish-price">$24</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="孜然牛肉" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_孜然牛肉.jpg" alt="孜然牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>孜然牛肉</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">孜然牛肉</div>
-        <div class="dish-price">$29</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="火爆肥肠" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_火爆肥肠.jpg" alt="火爆肥肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>火爆肥肠</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">火爆肥肠</div>
-        <div class="dish-price">$29</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="辣子鸡" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_辣子鸡.jpg" alt="辣子鸡" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>辣子鸡</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">辣子鸡</div>
-        <div class="dish-price">$29</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="鱼香肉丝" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鱼香肉丝.jpg" alt="鱼香肉丝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼香肉丝</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">鱼香肉丝</div>
-        <div class="dish-price">$29</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="麻婆豆腐" data-price="$16">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_麻婆豆腐.jpg" alt="麻婆豆腐" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>麻婆豆腐</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">麻婆豆腐</div>
-        <div class="dish-price">$16</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="小炒干锅鸡" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_小炒干锅鸡.jpg" alt="小炒干锅鸡" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小炒干锅鸡</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">小炒干锅鸡</div>
-        <div class="dish-price">$24</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="小煎排骨" data-price="$35">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_小煎排骨.jpg" alt="小煎排骨" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小煎排骨</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">小煎排骨</div>
         <div class="dish-price">$35</div>
       </div>
     </div>
-    <div class="dish-card" data-name="水煮牛肉片" data-price="$29">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_水煮牛肉片.jpg" alt="水煮牛肉片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>水煮牛肉片</div>'">
+    <div class="dish-card" data-name="酸菜鱼" data-price="40">
+      <img src="images/酸菜鱼.png" alt="酸菜鱼" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">酸菜鱼</div>
+        <div class="dish-price">$40</div>
       </div>
+    </div>
+    <div class="dish-card" data-name="避风塘大暴龙" data-price="49">
+      <img src="images/避风塘大暴龙.png" alt="避风塘大暴龙" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">避风塘大暴龙</div>
+        <div class="dish-price">$49</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="火爆牛肝" data-price="25">
+      <img src="images/user_火爆牛肝.jpg" alt="火爆牛肝" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">火爆牛肝</div>
+        <div class="dish-price">$25</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="爆炒腰花" data-price="40">
+      <img src="images/user_爆炒腰花.jpg" alt="爆炒腰花" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">爆炒腰花</div>
+        <div class="dish-price">$40</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="黄豆烧猪蹄" data-price="35">
+      <img src="images/user_黄豆烧猪蹄.jpg" alt="黄豆烧猪蹄" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">黄豆烧猪蹄</div>
+        <div class="dish-price">$35</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="蒜香排骨" data-price="35">
+      <img src="images/蒜香排骨.png" alt="蒜香排骨" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">蒜香排骨</div>
+        <div class="dish-price">$35</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="梅香扣肉" data-price="35">
+      <img src="images/user_梅香扣肉.jpg" alt="梅香扣肉" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">梅香扣肉</div>
+        <div class="dish-price">$35</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="双椒牛肉丝" data-price="31">
+      <img src="images/user_双椒牛肉丝.jpg" alt="双椒牛肉丝" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">双椒牛肉丝</div>
+        <div class="dish-price">$31</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小炒肉" data-price="25">
+      <img src="images/user_小炒肉.jpg" alt="小炒肉" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">小炒肉</div>
+        <div class="dish-price">$25</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="回锅肉" data-price="25">
+      <img src="images/user_回锅肉.jpg" alt="回锅肉" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">回锅肉</div>
+        <div class="dish-price">$25</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="孜然牛肉" data-price="31">
+      <img src="images/user_孜然牛肉.jpg" alt="孜然牛肉" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">孜然牛肉</div>
+        <div class="dish-price">$31</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="火爆肥肠" data-price="31">
+      <img src="images/user_火爆肥肠.jpg" alt="火爆肥肠" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">火爆肥肠</div>
+        <div class="dish-price">$31</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="辣子鸡" data-price="31">
+      <img src="images/user_辣子鸡.jpg" alt="辣子鸡" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">辣子鸡</div>
+        <div class="dish-price">$31</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鱼香肉丝" data-price="31">
+      <img src="images/user_鱼香肉丝.jpg" alt="鱼香肉丝" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">鱼香肉丝</div>
+        <div class="dish-price">$31</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="麻婆豆腐" data-price="17">
+      <img src="images/user_麻婆豆腐.jpg" alt="麻婆豆腐" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">麻婆豆腐</div>
+        <div class="dish-price">$17</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小炒干锅鸡" data-price="25">
+      <img src="images/user_小炒干锅鸡.jpg" alt="小炒干锅鸡" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">小炒干锅鸡</div>
+        <div class="dish-price">$25</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小煎排骨" data-price="37">
+      <img src="images/user_小煎排骨.jpg" alt="小煎排骨" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="dish-info">
+        <div class="dish-name">小煎排骨</div>
+        <div class="dish-price">$37</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="水煮牛肉片" data-price="31">
+      <img src="images/user_水煮牛肉片.jpg" alt="水煮牛肉片" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">水煮牛肉片</div>
-        <div class="dish-price">$29</div>
+        <div class="dish-price">$31</div>
       </div>
     </div>
-</div><div class="dish-list">
-    <div class="dish-row" data-name="干锅鸡翅" data-price="$33">
-      <span class="dish-name-text">干锅鸡翅</span>
-      <span class="dish-price-text">$33</span>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="干锅鸡翅" data-price="35">
+      <span class="dish-list-name">干锅鸡翅</span>
+      <span class="dish-list-price">$35</span>
     </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-养生汤">
-  <h2 class="category-title">养生汤 <span class="cat-count">(3)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="松茸土鸡汤" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_松茸土鸡汤.jpg" alt="松茸土鸡汤" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>松茸土鸡汤</div>'">
-      </div>
+<div class="category-section" id="cat-养生汤" data-category="养生汤">
+  <div class="category-title">养生汤 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(3道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="松茸土鸡汤" data-price="25">
+      <img src="images/user_松茸土鸡汤.jpg" alt="松茸土鸡汤" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">松茸土鸡汤</div>
-        <div class="dish-price">$24</div>
+        <div class="dish-price">$25</div>
       </div>
     </div>
-    <div class="dish-card" data-name="番茄鸡蛋汤" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_番茄鸡蛋汤.jpg" alt="番茄鸡蛋汤" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>番茄鸡蛋汤</div>'">
-      </div>
+    <div class="dish-card" data-name="番茄鸡蛋汤" data-price="14">
+      <img src="images/user_番茄鸡蛋汤.jpg" alt="番茄鸡蛋汤" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">番茄鸡蛋汤</div>
-        <div class="dish-price">$13</div>
+        <div class="dish-price">$14</div>
       </div>
     </div>
-</div><div class="dish-list">
-    <div class="dish-row" data-name="白菜豆腐汤" data-price="$10">
-      <span class="dish-name-text">白菜豆腐汤</span>
-      <span class="dish-price-text">$10</span>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="白菜豆腐汤" data-price="11">
+      <span class="dish-list-name">白菜豆腐汤</span>
+      <span class="dish-list-price">$11</span>
     </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-主食类">
-  <h2 class="category-title">主食类 <span class="cat-count">(17)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="牛肉面" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/jibo.jpg" alt="牛肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛肉面</div>'">
-      </div>
+<div class="category-section" id="cat-主食类" data-category="主食类">
+  <div class="category-title">主食类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(17道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="牛肉面" data-price="11">
+      <img src="images/牛肉面.png" alt="牛肉面" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">牛肉面</div>
-        <div class="dish-price">$10</div>
+        <div class="dish-price">$11</div>
       </div>
     </div>
-    <div class="dish-card" data-name="酸菜牛肉面" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_酸菜牛肉面.jpg" alt="酸菜牛肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>酸菜牛肉面</div>'">
-      </div>
+    <div class="dish-card" data-name="酸菜牛肉面" data-price="14">
+      <img src="images/user_酸菜牛肉面.jpg" alt="酸菜牛肉面" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">酸菜牛肉面</div>
-        <div class="dish-price">$13</div>
+        <div class="dish-price">$14</div>
       </div>
     </div>
-    <div class="dish-card" data-name="红烧牛肉面" data-price="$16">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_红烧牛肉面.jpg" alt="红烧牛肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>红烧牛肉面</div>'">
-      </div>
+    <div class="dish-card" data-name="红烧牛肉面" data-price="17">
+      <img src="images/user_红烧牛肉面.jpg" alt="红烧牛肉面" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">红烧牛肉面</div>
-        <div class="dish-price">$16</div>
+        <div class="dish-price">$17</div>
       </div>
     </div>
-    <div class="dish-card" data-name="牛肉汤米粉" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_牛肉汤米粉.jpg" alt="牛肉汤米粉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛肉汤米粉</div>'">
-      </div>
+    <div class="dish-card" data-name="牛肉汤米粉" data-price="11">
+      <img src="images/user_牛肉汤米粉.jpg" alt="牛肉汤米粉" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">牛肉汤米粉</div>
-        <div class="dish-price">$10</div>
+        <div class="dish-price">$11</div>
       </div>
     </div>
-    <div class="dish-card" data-name="炒面条" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/jiu_cai.jpg" alt="炒面条" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>炒面条</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">炒面条</div>
-        <div class="dish-price">$13</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="炒面片" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/jiu_cai_ji_dan.jpg" alt="炒面片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>炒面片</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">炒面片</div>
-        <div class="dish-price">$13</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="烩面片" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/jizhua.jpg" alt="烩面片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>烩面片</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">烩面片</div>
-        <div class="dish-price">$13</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="双椒猪肉面" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_双椒猪肉面.jpg" alt="双椒猪肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>双椒猪肉面</div>'">
-      </div>
+    <div class="dish-card" data-name="双椒猪肉面" data-price="11">
+      <img src="images/user_双椒猪肉面.jpg" alt="双椒猪肉面" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">双椒猪肉面</div>
-        <div class="dish-price">$10</div>
+        <div class="dish-price">$11</div>
       </div>
     </div>
-    <div class="dish-card" data-name="杂酱面" data-price="$12">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/kaomianjin.jpg" alt="杂酱面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>杂酱面</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">杂酱面</div>
-        <div class="dish-price">$12</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="豌杂面" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/lamb_skewers.jpg" alt="豌杂面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>豌杂面</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">豌杂面</div>
-        <div class="dish-price">$10</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="凉面" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/laziji.jpg" alt="凉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>凉面</div>'">
-      </div>
+    <div class="dish-card" data-name="凉面" data-price="14">
+      <img src="images/凉面.png" alt="凉面" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">凉面</div>
-        <div class="dish-price">$13</div>
+        <div class="dish-price">$14</div>
       </div>
     </div>
-    <div class="dish-card" data-name="浆水面" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/lian_ou_pian.jpg" alt="浆水面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>浆水面</div>'">
-      </div>
+    <div class="dish-card" data-name="浆水面" data-price="11">
+      <img src="images/浆水面.png" alt="浆水面" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">浆水面</div>
-        <div class="dish-price">$10</div>
+        <div class="dish-price">$11</div>
       </div>
     </div>
-    <div class="dish-card" data-name="水饺" data-price="$13">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/liang_ban_ji.jpg" alt="水饺" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>水饺</div>'">
-      </div>
+    <div class="dish-card" data-name="水饺" data-price="14">
+      <img src="images/水饺.png" alt="水饺" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">水饺</div>
-        <div class="dish-price">$13</div>
+        <div class="dish-price">$14</div>
       </div>
     </div>
-    <div class="dish-card" data-name="蛋炒饭" data-price="$10">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/liangbanniurou.jpg" alt="蛋炒饭" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蛋炒饭</div>'">
-      </div>
+    <div class="dish-card" data-name="蛋炒饭" data-price="11">
+      <img src="images/蛋炒饭.png" alt="蛋炒饭" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">蛋炒饭</div>
-        <div class="dish-price">$10</div>
+        <div class="dish-price">$11</div>
       </div>
     </div>
-    <div class="dish-card" data-name="什锦牛肉炒饭" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_什锦牛肉炒饭.jpg" alt="什锦牛肉炒饭" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>什锦牛肉炒饭</div>'">
-      </div>
+    <div class="dish-card" data-name="什锦牛肉炒饭" data-price="21">
+      <img src="images/user_什锦牛肉炒饭.jpg" alt="什锦牛肉炒饭" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">什锦牛肉炒饭</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
-    <div class="dish-card" data-name="加牛肉" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/lurou_pinpan.jpg" alt="加牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>加牛肉</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">加牛肉</div>
-        <div class="dish-price">$4</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="小碗炖牛肉" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/mabuyugan_gan.jpg" alt="小碗炖牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小碗炖牛肉</div>'">
-      </div>
+    <div class="dish-card" data-name="小碗炖牛肉" data-price="21">
+      <img src="images/小碗炖牛肉.png" alt="小碗炖牛肉" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">小碗炖牛肉</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="加牛肉" data-price="4">
+      <span class="dish-list-name">加牛肉</span>
+      <span class="dish-list-price">$4</span>
+    </div>
+    <div class="dish-list-item" data-name="豌杂面" data-price="11">
+      <span class="dish-list-name">豌杂面</span>
+      <span class="dish-list-price">$11</span>
+    </div>
+    <div class="dish-list-item" data-name="杂酱面" data-price="13">
+      <span class="dish-list-name">杂酱面</span>
+      <span class="dish-list-price">$13</span>
+    </div>
+    <div class="dish-list-item" data-name="炒面条" data-price="14">
+      <span class="dish-list-name">炒面条</span>
+      <span class="dish-list-price">$14</span>
+    </div>
+    <div class="dish-list-item" data-name="炒面片" data-price="14">
+      <span class="dish-list-name">炒面片</span>
+      <span class="dish-list-price">$14</span>
+    </div>
+    <div class="dish-list-item" data-name="烩面片" data-price="14">
+      <span class="dish-list-name">烩面片</span>
+      <span class="dish-list-price">$14</span>
+    </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-烧烤牛羊类">
-  <h2 class="category-title">烧烤牛羊类 <span class="cat-count">(7)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="羊肉串" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_羊肉串.jpg" alt="羊肉串" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>羊肉串</div>'">
-      </div>
+<div class="category-section" id="cat-烧烤牛羊类" data-category="烧烤牛羊类">
+  <div class="category-title">烧烤牛羊类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(7道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="羊肉串" data-price="1">
+      <img src="images/user_羊肉串.jpg" alt="羊肉串" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">羊肉串</div>
         <div class="dish-price">$1</div>
       </div>
     </div>
-    <div class="dish-card" data-name="牛肉串" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/mao_xue_wang.jpg" alt="牛肉串" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛肉串</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">牛肉串</div>
-        <div class="dish-price">$1</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="牛板筋" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/maoxuewang.jpg" alt="牛板筋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛板筋</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">牛板筋</div>
-        <div class="dish-price">$3</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="熟牛筋" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_熟牛筋.jpg" alt="熟牛筋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>熟牛筋</div>'">
-      </div>
+    <div class="dish-card" data-name="熟牛筋" data-price="4">
+      <img src="images/user_熟牛筋.jpg" alt="熟牛筋" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">熟牛筋</div>
         <div class="dish-price">$4</div>
       </div>
     </div>
-    <div class="dish-card" data-name="牛心管" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/matsutake_chicken_soup.jpg" alt="牛心管" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛心管</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">牛心管</div>
-        <div class="dish-price">$3</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="烤羊排" data-price="$38">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/mayishangshu.jpg" alt="烤羊排" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>烤羊排</div>'">
-      </div>
+    <div class="dish-card" data-name="烤羊排" data-price="40">
+      <img src="images/烤羊排.png" alt="烤羊排" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">烤羊排</div>
-        <div class="dish-price">$38</div>
+        <div class="dish-price">$40</div>
       </div>
     </div>
-    <div class="dish-card" data-name="羊腰" data-price="$7">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/mei_xiang_kou_rou.jpg" alt="羊腰" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>羊腰</div>'">
-      </div>
+    <div class="dish-card" data-name="羊腰" data-price="7">
+      <img src="images/羊腰.png" alt="羊腰" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">羊腰</div>
         <div class="dish-price">$7</div>
       </div>
     </div>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="牛肉串" data-price="1">
+      <span class="dish-list-name">牛肉串</span>
+      <span class="dish-list-price">$1</span>
+    </div>
+    <div class="dish-list-item" data-name="牛板筋" data-price="3">
+      <span class="dish-list-name">牛板筋</span>
+      <span class="dish-list-price">$3</span>
+    </div>
+    <div class="dish-list-item" data-name="牛心管" data-price="3">
+      <span class="dish-list-name">牛心管</span>
+      <span class="dish-list-price">$3</span>
+    </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-烧烤鸡货类">
-  <h2 class="category-title">烧烤鸡货类 <span class="cat-count">(7)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="鸡爪" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/nian_gao.jpg" alt="鸡爪" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡爪</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">鸡爪</div>
-        <div class="dish-price">$3</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="鸡脖" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/niu_ban_jin.jpg" alt="鸡脖" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡脖</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">鸡脖</div>
-        <div class="dish-price">$3</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="鸡腿" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/niurou_chuan.jpg" alt="鸡腿" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡腿</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">鸡腿</div>
-        <div class="dish-price">$4</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="翅中" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/niuroutang_mifen.jpg" alt="翅中" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>翅中</div>'">
-      </div>
+<div class="category-section" id="cat-烧烤鸡货类" data-category="烧烤鸡货类">
+  <div class="category-title">烧烤鸡货类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(7道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="翅中" data-price="4">
+      <img src="images/翅中.png" alt="翅中" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">翅中</div>
         <div class="dish-price">$4</div>
       </div>
     </div>
-    <div class="dish-card" data-name="骨肉相连" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_骨肉相连.jpg" alt="骨肉相连" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>骨肉相连</div>'">
-      </div>
+    <div class="dish-card" data-name="骨肉相连" data-price="3">
+      <img src="images/user_骨肉相连.jpg" alt="骨肉相连" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">骨肉相连</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="鸡柳" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鸡柳.jpg" alt="鸡柳" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡柳</div>'">
-      </div>
+    <div class="dish-card" data-name="鸡柳" data-price="3">
+      <img src="images/user_鸡柳.jpg" alt="鸡柳" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">鸡柳</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="鸽子" data-price="$24">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鸽子.jpg" alt="鸽子" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸽子</div>'">
-      </div>
+    <div class="dish-card" data-name="鸽子" data-price="25">
+      <img src="images/user_鸽子.jpg" alt="鸽子" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">鸽子</div>
-        <div class="dish-price">$24</div>
+        <div class="dish-price">$25</div>
       </div>
     </div>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="鸡爪" data-price="3">
+      <span class="dish-list-name">鸡爪</span>
+      <span class="dish-list-price">$3</span>
+    </div>
+    <div class="dish-list-item" data-name="鸡脖" data-price="3">
+      <span class="dish-list-name">鸡脖</span>
+      <span class="dish-list-price">$3</span>
+    </div>
+    <div class="dish-list-item" data-name="鸡腿" data-price="4">
+      <span class="dish-list-name">鸡腿</span>
+      <span class="dish-list-price">$4</span>
+    </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-烧烤猪肉类">
-  <h2 class="category-title">烧烤猪肉类 <span class="cat-count">(4)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="五花肉" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_五花肉.jpg" alt="五花肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>五花肉</div>'">
-      </div>
+<div class="category-section" id="cat-烧烤猪肉类" data-category="烧烤猪肉类">
+  <div class="category-title">烧烤猪肉类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(4道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="五花肉" data-price="1">
+      <img src="images/user_五花肉.jpg" alt="五花肉" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">五花肉</div>
         <div class="dish-price">$1</div>
       </div>
     </div>
-    <div class="dish-card" data-name="肥肠" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_肥肠.jpg" alt="肥肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>肥肠</div>'">
-      </div>
+    <div class="dish-card" data-name="肥肠" data-price="4">
+      <img src="images/user_肥肠.jpg" alt="肥肠" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">肥肠</div>
         <div class="dish-price">$4</div>
       </div>
     </div>
-    <div class="dish-card" data-name="猪蹄" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_猪蹄.jpg" alt="猪蹄" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>猪蹄</div>'">
-      </div>
+    <div class="dish-card" data-name="猪蹄" data-price="21">
+      <img src="images/user_猪蹄.jpg" alt="猪蹄" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">猪蹄</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
-    <div class="dish-card" data-name="风干大油边" data-price="$8">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/pork_intestine_bbq.jpg" alt="风干大油边" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>风干大油边</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">风干大油边</div>
-        <div class="dish-price">$8</div>
-      </div>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="风干大油边" data-price="8">
+      <span class="dish-list-name">风干大油边</span>
+      <span class="dish-list-price">$8</span>
     </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-烧烤海鲜类">
-  <h2 class="category-title">烧烤海鲜类 <span class="cat-count">(5)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="马步鱼干" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_马步鱼干.jpg" alt="马步鱼干" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>马步鱼干</div>'">
-      </div>
+<div class="category-section" id="cat-烧烤海鲜类" data-category="烧烤海鲜类">
+  <div class="category-title">烧烤海鲜类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(5道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="马步鱼干" data-price="1">
+      <img src="images/user_马步鱼干.jpg" alt="马步鱼干" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">马步鱼干</div>
         <div class="dish-price">$1</div>
       </div>
     </div>
-    <div class="dish-card" data-name="鲜墨鱼" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鲜墨鱼.jpg" alt="鲜墨鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鲜墨鱼</div>'">
-      </div>
+    <div class="dish-card" data-name="鲜墨鱼" data-price="3">
+      <img src="images/user_爆炒鲜墨鱼.jpg" alt="鲜墨鱼" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">鲜墨鱼</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="小黄花鱼" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_小黄花鱼.jpg" alt="小黄花鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小黄花鱼</div>'">
-      </div>
+    <div class="dish-card" data-name="小黄花鱼" data-price="3">
+      <img src="images/user_小黄花鱼.jpg" alt="小黄花鱼" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">小黄花鱼</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="大虾" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_大虾.jpg" alt="大虾" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>大虾</div>'">
-      </div>
+    <div class="dish-card" data-name="大虾" data-price="4">
+      <img src="images/user_大虾.jpg" alt="大虾" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">大虾</div>
         <div class="dish-price">$4</div>
       </div>
     </div>
-    <div class="dish-card" data-name="手撕鱿鱼干" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/shijin_niurou_chaofan.jpg" alt="手撕鱿鱼干" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>手撕鱿鱼干</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">手撕鱿鱼干</div>
-        <div class="dish-price">$20</div>
-      </div>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="手撕鱿鱼干" data-price="21">
+      <span class="dish-list-name">手撕鱿鱼干</span>
+      <span class="dish-list-price">$21</span>
     </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-烧烤蔬菜类">
-  <h2 class="category-title">烧烤蔬菜类 <span class="cat-count">(16)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="土豆片" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_土豆片.jpg" alt="土豆片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>土豆片</div>'">
-      </div>
+<div class="category-section" id="cat-烧烤蔬菜类" data-category="烧烤蔬菜类">
+  <div class="category-title">烧烤蔬菜类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(16道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="土豆片" data-price="1">
+      <img src="images/user_土豆片.jpg" alt="土豆片" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">土豆片</div>
         <div class="dish-price">$1</div>
       </div>
     </div>
-    <div class="dish-card" data-name="大蒜" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/shrimp_balls.jpg" alt="大蒜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>大蒜</div>'">
-      </div>
-      <div class="dish-info">
-        <div class="dish-name">大蒜</div>
-        <div class="dish-price">$1</div>
-      </div>
-    </div>
-    <div class="dish-card" data-name="培根金针菇" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/shu_niu_jin.jpg" alt="培根金针菇" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>培根金针菇</div>'">
-      </div>
+    <div class="dish-card" data-name="培根金针菇" data-price="3">
+      <img src="images/培根金针菇.png" alt="培根金针菇" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">培根金针菇</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="鱼子丸" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鱼子丸.jpg" alt="鱼子丸" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼子丸</div>'">
-      </div>
+    <div class="dish-card" data-name="鱼子丸" data-price="3">
+      <img src="images/user_鱼子丸.jpg" alt="鱼子丸" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">鱼子丸</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="虾子丸" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_虾子丸.jpg" alt="虾子丸" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>虾子丸</div>'">
-      </div>
+    <div class="dish-card" data-name="虾子丸" data-price="3">
+      <img src="images/user_虾子丸.jpg" alt="虾子丸" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">虾子丸</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="鱼豆腐" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_鱼豆腐.jpg" alt="鱼豆腐" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼豆腐</div>'">
-      </div>
+    <div class="dish-card" data-name="鱼豆腐" data-price="3">
+      <img src="images/user_鱼豆腐.jpg" alt="鱼豆腐" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">鱼豆腐</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="千叶豆腐" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_千叶豆腐.jpg" alt="千叶豆腐" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>千叶豆腐</div>'">
-      </div>
+    <div class="dish-card" data-name="千叶豆腐" data-price="3">
+      <img src="images/user_千叶豆腐.jpg" alt="千叶豆腐" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">千叶豆腐</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="韭菜" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/sour_spicy_cabbage.jpg" alt="韭菜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>韭菜</div>'">
-      </div>
+    <div class="dish-card" data-name="韭菜" data-price="3">
+      <img src="images/韭菜.png" alt="韭菜" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">韭菜</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="菜花" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_菜花.jpg" alt="菜花" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>菜花</div>'">
-      </div>
+    <div class="dish-card" data-name="菜花" data-price="3">
+      <img src="images/user_菜花.jpg" alt="菜花" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">菜花</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="菜卷" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_菜卷.jpg" alt="菜卷" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>菜卷</div>'">
-      </div>
+    <div class="dish-card" data-name="菜卷" data-price="3">
+      <img src="images/user_菜卷.jpg" alt="菜卷" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">菜卷</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="莲藕片" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/stir_fried_intestines.jpg" alt="莲藕片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>莲藕片</div>'">
-      </div>
+    <div class="dish-card" data-name="莲藕片" data-price="3">
+      <img src="images/莲藕片.png" alt="莲藕片" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">莲藕片</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="茄子" data-price="$7">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/stir_fried_noodle_slices.jpg" alt="茄子" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>茄子</div>'">
-      </div>
+    <div class="dish-card" data-name="茄子" data-price="7">
+      <img src="images/茄子.png" alt="茄子" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">茄子</div>
         <div class="dish-price">$7</div>
       </div>
     </div>
-    <div class="dish-card" data-name="年糕" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/stir_fried_pork.jpg" alt="年糕" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>年糕</div>'">
-      </div>
+    <div class="dish-card" data-name="年糕" data-price="1">
+      <img src="images/年糕.png" alt="年糕" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">年糕</div>
         <div class="dish-price">$1</div>
       </div>
     </div>
-    <div class="dish-card" data-name="馒头片" data-price="$1">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_馒头片.jpg" alt="馒头片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>馒头片</div>'">
-      </div>
+    <div class="dish-card" data-name="馒头片" data-price="1">
+      <img src="images/user_馒头片.jpg" alt="馒头片" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">馒头片</div>
         <div class="dish-price">$1</div>
       </div>
     </div>
-    <div class="dish-card" data-name="烤面筋" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/suan_la_lian_bai.jpg" alt="烤面筋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>烤面筋</div>'">
-      </div>
+    <div class="dish-card" data-name="烤面筋" data-price="3">
+      <img src="images/烤面筋.png" alt="烤面筋" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">烤面筋</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-</div><div class="dish-list">
-    <div class="dish-row" data-name="尖椒" data-price="$3">
-      <span class="dish-name-text">尖椒</span>
-      <span class="dish-price-text">$3</span>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="大蒜" data-price="1">
+      <span class="dish-list-name">大蒜</span>
+      <span class="dish-list-price">$1</span>
     </div>
+    <div class="dish-list-item" data-name="尖椒" data-price="3">
+      <span class="dish-list-name">尖椒</span>
+      <span class="dish-list-price">$3</span>
+    </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-烤肠类">
-  <h2 class="category-title">烤肠类 <span class="cat-count">(3)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="热狗肠" data-price="$4">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/suan_la_tu_dou_si.jpg" alt="热狗肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>热狗肠</div>'">
-      </div>
+<div class="category-section" id="cat-烤肠类" data-category="烤肠类">
+  <div class="category-title">烤肠类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(3道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="热狗肠" data-price="4">
+      <img src="images/热狗肠.png" alt="热狗肠" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">热狗肠</div>
         <div class="dish-price">$4</div>
       </div>
     </div>
-    <div class="dish-card" data-name="火腿肠" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/suan_rong_huang_gua.jpg" alt="火腿肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>火腿肠</div>'">
-      </div>
+    <div class="dish-card" data-name="火腿肠" data-price="3">
+      <img src="images/火腿肠.png" alt="火腿肠" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">火腿肠</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
-    <div class="dish-card" data-name="脆骨肠" data-price="$3">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_脆骨肠.jpg" alt="脆骨肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>脆骨肠</div>'">
-      </div>
+    <div class="dish-card" data-name="脆骨肠" data-price="3">
+      <img src="images/user_脆骨肠.jpg" alt="脆骨肠" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">脆骨肠</div>
         <div class="dish-price">$3</div>
       </div>
     </div>
+  </div>
 </div>
-</section>
-<section class="category-section" id="cat-锡纸盒类">
-  <h2 class="category-title">锡纸盒类 <span class="cat-count">(3)</span></h2>
-  <div class="dish-grid">
-    <div class="dish-card" data-name="锡纸金针菇" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_锡纸金针菇.jpg" alt="锡纸金针菇" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>锡纸金针菇</div>'">
-      </div>
+<div class="category-section" id="cat-锡纸盒类" data-category="锡纸盒类">
+  <div class="category-title">锡纸盒类 <span style="font-size:0.8em;opacity:0.8;font-weight:400">(3道)</span></div>
+  <div class="dishes-grid">
+    <div class="dish-card" data-name="锡纸金针菇" data-price="21">
+      <img src="images/user_锡纸金针菇.jpg" alt="锡纸金针菇" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">锡纸金针菇</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
-    <div class="dish-card" data-name="锡纸花甲" data-price="$20">
-      <div class="dish-img-wrap">
-        <img class="dish-img" src="images/user_锡纸花甲.jpg" alt="锡纸花甲" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>锡纸花甲</div>'">
-      </div>
+    <div class="dish-card" data-name="锡纸花甲" data-price="21">
+      <img src="images/user_锡纸花甲.jpg" alt="锡纸花甲" loading="lazy" onerror="this.parentElement.style.display='none'">
       <div class="dish-info">
         <div class="dish-name">锡纸花甲</div>
-        <div class="dish-price">$20</div>
+        <div class="dish-price">$21</div>
       </div>
     </div>
-</div><div class="dish-list">
-    <div class="dish-row" data-name="锡纸鸭血" data-price="$20">
-      <span class="dish-name-text">锡纸鸭血</span>
-      <span class="dish-price-text">$20</span>
+  </div>
+  <div class="dishes-list">
+    <div class="dish-list-item" data-name="锡纸鸭血" data-price="21">
+      <span class="dish-list-name">锡纸鸭血</span>
+      <span class="dish-list-price">$21</span>
     </div>
+  </div>
 </div>
-</section>
-  <div class="no-result" id="noResult">😕 没有找到相关菜品，请尝试其他关键词</div>
-</main>
-
-<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</button>
+</div>
+<div class="no-results" id="noResults">😕 没有找到相关菜品</div>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</button>
 
 <script>
-// ── 缓存清理（每次打开都强制刷新）──────────────────────────────
-(function() {
-  const CURRENT_VERSION = '1782217760';
-  const stored = localStorage.getItem('menu_version');
-  if (stored !== CURRENT_VERSION) {
-    localStorage.setItem('menu_version', CURRENT_VERSION);
-    // 清理 Service Worker 缓存
-    if ('caches' in window) {
-      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+// 缓存清理
+const CACHE_VERSION = '1782219549';
+const storedVersion = localStorage.getItem('menu_cache_version');
+if (storedVersion !== CACHE_VERSION) {
+    localStorage.setItem('menu_cache_version', CACHE_VERSION);
+    if (storedVersion !== null && 'caches' in window) {
+        caches.keys().then(names => names.forEach(name => caches.delete(name)));
     }
-    // 如果版本不同且不是首次访问，强制刷新
-    if (stored !== null) {
-      window.location.reload(true);
-    }
-  }
-})();
+}
 
-// ── 搜索 ────────────────────────────────────────────────────────
+// 搜索功能
 function doSearch() {
-  const kw = document.getElementById('searchInput').value.trim().toLowerCase();
-  let total = 0;
-  document.querySelectorAll('.category-section').forEach(sec => {
-    let secVisible = 0;
-    sec.querySelectorAll('.dish-card, .dish-row').forEach(el => {
-      const name = (el.dataset.name || '').toLowerCase();
-      const price = (el.dataset.price || '').toLowerCase();
-      const show = !kw || name.includes(kw) || price.includes(kw);
-      el.style.display = show ? '' : 'none';
-      if (show) secVisible++;
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const sections = document.querySelectorAll('.category-section');
+    let total = 0;
+    sections.forEach(sec => {
+        const cards = sec.querySelectorAll('.dish-card, .dish-list-item');
+        let visible = 0;
+        cards.forEach(card => {
+            const name = card.dataset.name || '';
+            const price = String(card.dataset.price || '');
+            const match = !q || name.toLowerCase().includes(q) || price.includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        sec.style.display = visible > 0 ? '' : 'none';
+        total += visible;
     });
-    sec.style.display = secVisible > 0 ? '' : 'none';
-    total += secVisible;
-  });
-  const noResult = document.getElementById('noResult');
-  const countEl = document.getElementById('searchCount');
-  if (kw) {
-    noResult.style.display = total === 0 ? 'block' : 'none';
-    countEl.textContent = `找到 ${total} 个菜品`;
-  } else {
-    noResult.style.display = 'none';
-    countEl.textContent = '';
-    document.querySelectorAll('.category-section').forEach(s => s.style.display = '');
-    document.querySelectorAll('.dish-card, .dish-row').forEach(el => el.style.display = '');
-  }
-}
-
-// ── 分类导航 ─────────────────────────────────────────────────────
-function scrollToSection(cat) {
-  const el = document.getElementById('cat-' + cat);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ── 回顶部按钮 ───────────────────────────────────────────────────
-const btn = document.getElementById('backToTop');
-window.addEventListener('scroll', () => {
-  btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
-});
-
-// ── 导航高亮 ─────────────────────────────────────────────────────
-const navBtns = document.querySelectorAll('.nav-btn');
-const sections = document.querySelectorAll('.category-section');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.id.replace('cat-', '');
-      navBtns.forEach(b => {
-        b.classList.toggle('active', b.textContent.trim().startsWith(id));
-      });
+    const stats = document.getElementById('searchStats');
+    const noRes = document.getElementById('noResults');
+    if (q) {
+        stats.textContent = `找到 ${total} 道菜品`;
+        noRes.style.display = total === 0 ? 'block' : 'none';
+    } else {
+        stats.textContent = '';
+        noRes.style.display = 'none';
     }
-  });
-}, { threshold: 0.2 });
-sections.forEach(s => observer.observe(s));
+}
+
+// 分类导航
+function scrollToCategory(cat) {
+    const el = document.getElementById('cat-' + cat);
+    if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+// 回顶部
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+    backTop.classList.toggle('show', window.scrollY > 300);
+});
 </script>
 </body>
 </html>
