@@ -3,1492 +3,1296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>🍜 中餐厅菜单</title>
+  <meta name="version" content="1782217760">
+  <title>中餐厅菜单</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #faf8f3 0%, #f5f1e8 30%, #efe8dd 60%, #f0ebe5 100%);
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8e5f5 40%, #f0edf8 70%, #f5f7fa 100%);
       background-attachment: fixed;
-      color: #3a3a3a;
+      min-height: 100vh;
+      color: #2c3e50;
     }
-
-    /* 顶部 Banner */
+    /* ── 顶部 ── */
     .header {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(139,92,246,0.15);
+      padding: 20px 16px 14px;
       text-align: center;
-      padding: 40px 20px 20px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(250,248,243,0.95) 100%);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(180,160,140,0.2);
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
     }
-
     .header h1 {
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 900;
-      background: linear-gradient(90deg, #C97C4C, #D4A574, #B8860B, #C97C4C);
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, #8B5CF6, #EC4899, #8B5CF6);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: shimmer 3s linear infinite;
-      letter-spacing: 4px;
-      margin-bottom: 8px;
     }
-
-    @keyframes shimmer {
-      to { background-position: 200% center; }
+    @keyframes shimmer { to { background-position: 200% center; } }
+    .header .subtitle {
+      font-size: clamp(0.82rem, 2vw, 1rem);
+      color: #7c6fa0;
+      margin-top: 4px;
     }
-
-    .header-subtitle {
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      color: #C97C4C;
-      letter-spacing: 2px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    .header-welcome {
-      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-      color: #D4A574;
-      letter-spacing: 1px;
-      font-weight: 500;
-    }
-
-    /* 搜索框 */
+    /* ── 搜索 ── */
     .search-wrap {
       max-width: 600px;
       margin: 16px auto 0;
-      position: relative;
+      padding: 0 16px;
     }
-
     .search-input {
       width: 100%;
-      padding: 12px 50px 12px 20px;
-      border-radius: 30px;
-      border: 2px solid rgba(201,124,76,0.3);
-      background: rgba(201,124,76,0.05);
-      backdrop-filter: blur(10px);
-      color: #3a3a3a;
+      padding: 10px 16px;
+      border: 2px solid rgba(139,92,246,0.3);
+      border-radius: 50px;
       font-size: 1rem;
       outline: none;
-      transition: all 0.3s;
+      background: rgba(255,255,255,0.9);
+      transition: border-color .2s;
     }
-
-    .search-input::placeholder { color: rgba(58,58,58,0.4); }
-    .search-input:focus { 
-      border-color: #C97C4C; 
-      background: rgba(201,124,76,0.1);
-      box-shadow: 0 0 0 3px rgba(201,124,76,0.1);
-    }
-
-    .search-icon {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2rem;
-    }
-
-    .search-result-count {
-      text-align: center;
-      color: rgba(58,58,58,0.6);
-      font-size: 0.85rem;
-      margin-top: 6px;
-      min-height: 20px;
-    }
-
-    /* 分类导航 */
+    .search-input:focus { border-color: #8B5CF6; }
+    .search-count { text-align:center; font-size:0.85rem; color:#7c6fa0; margin-top:6px; }
+    /* ── 分类导航 ── */
     .nav-wrap {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 16px 20px;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(180,160,140,0.15);
-    }
-
-    .nav-title {
-      font-size: 0.85rem;
-      color: rgba(58,58,58,0.6);
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-      font-weight: 600;
-    }
-
-    .nav-buttons {
+      max-width: 1200px;
+      margin: 14px auto 0;
+      padding: 0 16px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      justify-content: center;
     }
-
     .nav-btn {
       padding: 6px 14px;
+      border: 1.5px solid rgba(139,92,246,0.4);
       border-radius: 20px;
-      border: 1px solid rgba(201,124,76,0.3);
-      background: rgba(201,124,76,0.08);
-      color: #C97C4C;
+      background: rgba(255,255,255,0.7);
+      color: #6d4fc7;
       font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all .2s;
       white-space: nowrap;
-      font-weight: 500;
     }
-
     .nav-btn:hover, .nav-btn.active {
-      background: rgba(201,124,76,0.2);
-      border-color: #C97C4C;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(201,124,76,0.15);
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
+      color: #fff;
+      border-color: transparent;
     }
-
-    .count-badge {
-      background: rgba(201,124,76,0.2);
-      border-radius: 10px;
-      padding: 1px 6px;
-      font-size: 0.75rem;
-      margin-left: 4px;
-    }
-
-    /* 主内容区 */
-    .main-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* 分类区块 */
-    .category-section {
-      margin-bottom: 40px;
-      scroll-margin-top: 160px;
-    }
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid rgba(201,124,76,0.2);
-    }
-
+    /* ── 主内容 ── */
+    .main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 80px; }
+    /* ── 分类区块 ── */
+    .category-section { margin-bottom: 36px; }
     .category-title {
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
       font-weight: 700;
-      color: #C97C4C;
-      letter-spacing: 2px;
+      color: #5b3fa6;
+      padding: 10px 0 12px;
+      border-bottom: 2px solid rgba(139,92,246,0.2);
+      margin-bottom: 16px;
     }
-
-    .category-count {
-      font-size: 0.85rem;
-      color: rgba(58,58,58,0.5);
-      background: rgba(201,124,76,0.08);
-      padding: 2px 10px;
-      border-radius: 12px;
-    }
-
-    /* 菜品网格（有图片） */
+    .cat-count { font-size: 0.85rem; color: #a78bfa; font-weight: 400; }
+    /* ── 菜品网格 ── */
     .dish-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
-
-    /* 菜品卡片 */
     .dish-card {
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 14px;
       overflow: hidden;
-      border: 1px solid rgba(201,124,76,0.15);
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(139,92,246,0.1);
+      transition: transform .25s, box-shadow .25s;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-
     .dish-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(201,124,76,0.12);
-      border-color: rgba(201,124,76,0.4);
-      background: rgba(255,255,255,0.95);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(139,92,246,0.2);
     }
-
     .dish-img-wrap {
       width: 100%;
       aspect-ratio: 4/3;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(201,124,76,0.08) 0%, rgba(212,165,116,0.05) 100%);
+      background: #f0edf8;
     }
-
-    .dish-img-wrap img {
+    .dish-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      transition: transform .3s;
     }
-
-    .dish-card:hover .dish-img-wrap img {
-      transform: scale(1.08);
+    .dish-card:hover .dish-img { transform: scale(1.06); }
+    .no-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ede9fe, #fce7f3);
+      color: #7c6fa0;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 8px;
     }
-
-    .dish-info {
-      padding: 10px 12px 12px;
-    }
-
+    .dish-info { padding: 10px 12px; }
     .dish-name {
-      font-size: clamp(0.85rem, 2vw, 0.95rem);
+      font-size: clamp(0.82rem, 2vw, 0.95rem);
       font-weight: 600;
-      color: #3a3a3a;
-      margin-bottom: 6px;
+      color: #2c3e50;
+      margin-bottom: 4px;
       line-height: 1.3;
     }
-
     .dish-price {
-      font-size: clamp(0.9rem, 2vw, 1rem);
+      font-size: clamp(0.88rem, 2vw, 1rem);
       font-weight: 700;
-      background: linear-gradient(90deg, #C97C4C, #D4A574);
+      background: linear-gradient(90deg, #8B5CF6, #EC4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    /* 菜品列表（无图片） */
+    /* ── 无图片列表 ── */
     .dish-list {
       background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(8px);
       border-radius: 12px;
-      border: 1px solid rgba(201,124,76,0.15);
-      padding: 12px 0;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      overflow: hidden;
+      border: 1px solid rgba(139,92,246,0.1);
     }
-
     .dish-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
-      border-bottom: 1px solid rgba(201,124,76,0.08);
-      transition: all 0.2s;
+      padding: 11px 16px;
+      border-bottom: 1px solid rgba(139,92,246,0.08);
+      transition: background .15s;
     }
-
-    .dish-row:last-child {
-      border-bottom: none;
-    }
-
-    .dish-row:hover {
-      background: rgba(201,124,76,0.04);
-      padding-left: 20px;
-    }
-
-    .dish-name-text {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #3a3a3a;
-      flex: 1;
-    }
-
+    .dish-row:last-child { border-bottom: none; }
+    .dish-row:hover { background: rgba(139,92,246,0.05); }
+    .dish-name-text { font-size: 0.95rem; color: #2c3e50; }
     .dish-price-text {
       font-size: 0.95rem;
       font-weight: 700;
-      background: linear-gradient(90deg, #C97C4C, #D4A574);
+      background: linear-gradient(90deg, #8B5CF6, #EC4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-left: 16px;
+      margin-left: 12px;
       white-space: nowrap;
     }
-
-    /* 无结果提示 */
-    .no-result {
-      display: none;
-      text-align: center;
-      padding: 60px 20px;
-      color: rgba(58,58,58,0.5);
-      font-size: 1.1rem;
-    }
-
-    /* 回顶部按钮 */
+    /* ── 无结果 ── */
+    .no-result { text-align:center; color:#a78bfa; padding:40px; font-size:1rem; display:none; }
+    /* ── 回顶部 ── */
     .back-to-top {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 50px;
-      height: 50px;
+      bottom: 28px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #C97C4C, #D4A574);
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
       color: #fff;
       font-size: 1.4rem;
       border: none;
       cursor: pointer;
+      box-shadow: 0 4px 16px rgba(139,92,246,0.4);
       display: none;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 15px rgba(201,124,76,0.25);
-      transition: all 0.3s;
-      z-index: 999;
+      transition: transform .2s, opacity .2s;
+      z-index: 200;
     }
-
-    .back-to-top:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(201,124,76,0.35);
-    }
-
-    .back-to-top.visible { display: flex; }
-
-    /* 页脚 */
-    .footer {
-      text-align: center;
-      padding: 30px 20px;
-      color: rgba(58,58,58,0.4);
-      font-size: 0.85rem;
-      border-top: 1px solid rgba(201,124,76,0.1);
-      margin-top: 20px;
-    }
-
-    /* 响应式 */
-    @media (max-width: 768px) {
-      .header { padding: 20px 15px 15px; }
-      .dish-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-      .main-content { padding: 15px; }
-      .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; font-size: 1.2rem; }
-    }
-
-    @media (max-width: 480px) {
+    .back-to-top:hover { transform: translateY(-3px); }
+    /* ── 手机适配 ── */
+    @media (max-width: 600px) {
       .dish-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .nav-btn { font-size: 0.78rem; padding: 5px 10px; }
-      .dish-row { padding: 8px 12px; }
-      .dish-name-text { font-size: 0.9rem; }
-      .dish-price-text { font-size: 0.9rem; margin-left: 8px; }
+      .dish-card { border-radius: 10px; }
+      .dish-info { padding: 7px 9px; }
+      .back-to-top { bottom: 20px; right: 16px; width: 42px; height: 42px; font-size: 1.2rem; }
+    }
+    @media (max-width: 400px) {
+      .dish-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 顶部 Banner -->
-  <header class="header">
-    <h1>🍜 中餐厅</h1>
-    <div class="header-subtitle">美味 · 健康 · 实惠 · 营养</div>
-    <div class="header-welcome">❤️ 欢迎点餐 ❤️ 提前一天预定</div>
-    <div class="search-wrap">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索菜品名称或价格..." oninput="searchDishes(this.value)">
-    </div>
-    <div class="search-result-count" id="searchCount"></div>
-  </header>
-
-  <!-- 分类导航 -->
-  <div class="nav-wrap">
-    <div class="nav-title">📂 分类导航</div>
-    <div class="nav-buttons">
-          <button class="nav-btn" onclick="scrollToCategory('精美凉菜')">精美凉菜 <span class="count-badge">7</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('营养蔬菜')">营养蔬菜 <span class="count-badge">8</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('川菜小炒')">川菜小炒 <span class="count-badge">23</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('养生汤')">养生汤 <span class="count-badge">3</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('主食类')">主食类 <span class="count-badge">17</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('烧烤牛羊类')">烧烤牛羊类 <span class="count-badge">7</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('烧烤鸡货类')">烧烤鸡货类 <span class="count-badge">7</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('烧烤猪肉类')">烧烤猪肉类 <span class="count-badge">4</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('烧烤海鲜类')">烧烤海鲜类 <span class="count-badge">5</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('烧烤蔬菜类')">烧烤蔬菜类 <span class="count-badge">16</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('烤肠类')">烤肠类 <span class="count-badge">3</span></button>
-          <button class="nav-btn" onclick="scrollToCategory('锡纸盒类')">锡纸盒类 <span class="count-badge">3</span></button>
-    </div>
+<header class="header">
+  <h1>🍽️ 中餐厅菜单</h1>
+  <p class="subtitle">❤️ 欢迎点餐 ❤️ 提前一天预定</p>
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" type="text" placeholder="🔍 搜索菜品名称或价格..." oninput="doSearch()">
+    <div class="search-count" id="searchCount"></div>
   </div>
+</header>
 
-  <!-- 主内容 -->
-  <main class="main-content" id="mainContent">
-    <div class="no-result" id="noResult">😕 没有找到匹配的菜品，请尝试其他关键词</div>
+<div class="nav-wrap" id="navWrap">
+<button class="nav-btn" onclick="scrollToSection('精美凉菜')">精美凉菜</button>
+<button class="nav-btn" onclick="scrollToSection('营养蔬菜')">营养蔬菜</button>
+<button class="nav-btn" onclick="scrollToSection('川菜小炒')">川菜小炒</button>
+<button class="nav-btn" onclick="scrollToSection('养生汤')">养生汤</button>
+<button class="nav-btn" onclick="scrollToSection('主食类')">主食类</button>
+<button class="nav-btn" onclick="scrollToSection('烧烤牛羊类')">烧烤牛羊类</button>
+<button class="nav-btn" onclick="scrollToSection('烧烤鸡货类')">烧烤鸡货类</button>
+<button class="nav-btn" onclick="scrollToSection('烧烤猪肉类')">烧烤猪肉类</button>
+<button class="nav-btn" onclick="scrollToSection('烧烤海鲜类')">烧烤海鲜类</button>
+<button class="nav-btn" onclick="scrollToSection('烧烤蔬菜类')">烧烤蔬菜类</button>
+<button class="nav-btn" onclick="scrollToSection('烤肠类')">烤肠类</button>
+<button class="nav-btn" onclick="scrollToSection('锡纸盒类')">锡纸盒类</button>
 
-    <section class="category-section" id="精美凉菜">
-      <div class="category-header">
-        <h2 class="category-title">精美凉菜</h2>
-        <span class="category-count">7 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/baicai_doufu_tang.jpg" alt="凉拌鸡" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">凉拌鸡</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/bao_chao_xian_mo_yu.jpg" alt="凉拌牛肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">凉拌牛肉</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/baochao_yaohua.jpg" alt="卤肉拼盘" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">卤肉拼盘</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/bifengtang_dabao_long.jpg" alt="自贡冷吃牛肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">自贡冷吃牛肉</div>
-            <div class="dish-price">$20</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/braised_beef_noodles.jpg" alt="蒜蓉黄瓜" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">蒜蓉黄瓜</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/braised_meat_platter.jpg" alt="油炸花生" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">油炸花生</div>
-            <div class="dish-price">$8</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/cai_juan.jpg" alt="特色泡菜" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">特色泡菜</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-      </div>
-    </section>
+</div>
 
-    <section class="category-section" id="营养蔬菜">
-      <div class="category-header">
-        <h2 class="category-title">营养蔬菜</h2>
-        <span class="category-count">8 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/chicken_leg_bbq.jpg" alt="干锅土豆片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">干锅土豆片</div>
-            <div class="dish-price">$16</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/chicken_neck_bbq.jpg" alt="酸辣土豆丝" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">酸辣土豆丝</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/chizhong.jpg" alt="鱼香茄子" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鱼香茄子</div>
-            <div class="dish-price">$22</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/cuiguchang.jpg" alt="蚂蚁上树" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">蚂蚁上树</div>
-            <div class="dish-price">$16</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/da_xia.jpg" alt="西红柿鸡蛋" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">西红柿鸡蛋</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-      </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">酸辣莲白</span>
-        <span class="dish-price-text">$10</span>
-      </div>
-      <div class="dish-row">
-        <span class="dish-name-text">韭菜鸡蛋</span>
-        <span class="dish-price-text">$13</span>
-      </div>
-      <div class="dish-row">
-        <span class="dish-name-text">小炒时蔬</span>
-        <span class="dish-price-text">$20</span>
-      </div>
-      </div>
-    </section>
+<main class="main" id="mainContent">
 
-    <section class="category-section" id="川菜小炒">
-      <div class="category-header">
-        <h2 class="category-title">川菜小炒</h2>
-        <span class="category-count">23 道菜</span>
+<section class="category-section" id="cat-精美凉菜">
+  <h2 class="category-title">精美凉菜 <span class="cat-count">(7)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="凉拌鸡" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_凉拌鸡.jpg" alt="凉拌鸡" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>凉拌鸡</div>'">
       </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/double_pepper_pork_noodles.jpg" alt="爆炒鲜墨鱼" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">爆炒鲜墨鱼</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/dried_small_fish.jpg" alt="香辣蟹" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">香辣蟹</div>
-            <div class="dish-price">$38</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/dry_pot_potato.jpg" alt="毛血旺" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">毛血旺</div>
-            <div class="dish-price">$38</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/egg_fried_rice.jpg" alt="清蒸黄花鱼" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">清蒸黄花鱼</div>
-            <div class="dish-price">$33</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/fan_qie_ji_dan_tang.jpg" alt="酸菜鱼" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">酸菜鱼</div>
-            <div class="dish-price">$38</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/fei_chang.jpg" alt="避风塘大暴龙" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">避风塘大暴龙</div>
-            <div class="dish-price">$47</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/feng_gan_da_you_bian.jpg" alt="火爆牛肝" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">火爆牛肝</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/fried_peanuts.jpg" alt="爆炒腰花" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">爆炒腰花</div>
-            <div class="dish-price">$38</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/gan_guo_ji_chi.jpg" alt="黄豆烧猪蹄" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">黄豆烧猪蹄</div>
-            <div class="dish-price">$33</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/gan_guo_tu_dou_pian.jpg" alt="蒜香排骨" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">蒜香排骨</div>
-            <div class="dish-price">$33</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/garlic_cucumber.jpg" alt="梅香扣肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">梅香扣肉</div>
-            <div class="dish-price">$33</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/ge_zi.jpg" alt="双椒牛肉丝" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">双椒牛肉丝</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/grilled_eggplant.jpg" alt="小炒肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">小炒肉</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/grilled_garlic.jpg" alt="回锅肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">回锅肉</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/gurouxianglian.jpg" alt="孜然牛肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">孜然牛肉</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/hong_shao_niu_rou_mian.jpg" alt="火爆肥肠" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">火爆肥肠</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/hot_dog_sausage.jpg" alt="辣子鸡" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">辣子鸡</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/huang_dou_shao_zhu_ti.jpg" alt="鱼香肉丝" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鱼香肉丝</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/hui_guo_rou.jpg" alt="麻婆豆腐" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">麻婆豆腐</div>
-            <div class="dish-price">$16</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/huo_bao_fei_chang.jpg" alt="小炒干锅鸡" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">小炒干锅鸡</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/huo_bao_niu_gan.jpg" alt="水煮牛肉片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">水煮牛肉片</div>
-            <div class="dish-price">$29</div>
-          </div>
-        </div>
+      <div class="dish-info">
+        <div class="dish-name">凉拌鸡</div>
+        <div class="dish-price">$24</div>
       </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">干锅鸡翅</span>
-        <span class="dish-price-text">$33</span>
+    </div>
+    <div class="dish-card" data-name="凉拌牛肉" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_凉拌牛肉.jpg" alt="凉拌牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>凉拌牛肉</div>'">
       </div>
-      <div class="dish-row">
-        <span class="dish-name-text">小煎排骨</span>
-        <span class="dish-price-text">$35</span>
+      <div class="dish-info">
+        <div class="dish-name">凉拌牛肉</div>
+        <div class="dish-price">$24</div>
       </div>
+    </div>
+    <div class="dish-card" data-name="卤肉拼盘" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/baochao_yaohua.jpg" alt="卤肉拼盘" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>卤肉拼盘</div>'">
       </div>
-    </section>
+      <div class="dish-info">
+        <div class="dish-name">卤肉拼盘</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="自贡冷吃牛肉" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_自贡冷吃牛肉.jpg" alt="自贡冷吃牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>自贡冷吃牛肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">自贡冷吃牛肉</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="蒜蓉黄瓜" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_蒜蓉黄瓜.jpg" alt="蒜蓉黄瓜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蒜蓉黄瓜</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">蒜蓉黄瓜</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="油炸花生" data-price="$8">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_油炸花生.jpg" alt="油炸花生" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>油炸花生</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">油炸花生</div>
+        <div class="dish-price">$8</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="特色泡菜" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/cai_juan.jpg" alt="特色泡菜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>特色泡菜</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">特色泡菜</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-营养蔬菜">
+  <h2 class="category-title">营养蔬菜 <span class="cat-count">(8)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="干锅土豆片" data-price="$16">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_干锅土豆片.jpg" alt="干锅土豆片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>干锅土豆片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">干锅土豆片</div>
+        <div class="dish-price">$16</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="韭菜鸡蛋" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_韭菜鸡蛋.jpg" alt="韭菜鸡蛋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>韭菜鸡蛋</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">韭菜鸡蛋</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="酸辣土豆丝" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/chicken_neck_bbq.jpg" alt="酸辣土豆丝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>酸辣土豆丝</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">酸辣土豆丝</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鱼香茄子" data-price="$22">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鱼香茄子.jpg" alt="鱼香茄子" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼香茄子</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鱼香茄子</div>
+        <div class="dish-price">$22</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="蚂蚁上树" data-price="$16">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_蚂蚁上树.jpg" alt="蚂蚁上树" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蚂蚁上树</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">蚂蚁上树</div>
+        <div class="dish-price">$16</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="西红柿鸡蛋" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_西红柿鸡蛋.jpg" alt="西红柿鸡蛋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>西红柿鸡蛋</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">西红柿鸡蛋</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小炒时蔬" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_小炒时蔬.jpg" alt="小炒时蔬" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小炒时蔬</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">小炒时蔬</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+</div><div class="dish-list">
+    <div class="dish-row" data-name="酸辣莲白" data-price="$10">
+      <span class="dish-name-text">酸辣莲白</span>
+      <span class="dish-price-text">$10</span>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-川菜小炒">
+  <h2 class="category-title">川菜小炒 <span class="cat-count">(23)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="爆炒鲜墨鱼" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_爆炒鲜墨鱼.jpg" alt="爆炒鲜墨鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>爆炒鲜墨鱼</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">爆炒鲜墨鱼</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="香辣蟹" data-price="$38">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_香辣蟹.jpg" alt="香辣蟹" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>香辣蟹</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">香辣蟹</div>
+        <div class="dish-price">$38</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="毛血旺" data-price="$38">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/dry_pot_potato.jpg" alt="毛血旺" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>毛血旺</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">毛血旺</div>
+        <div class="dish-price">$38</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="清蒸黄花鱼" data-price="$33">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/egg_fried_rice.jpg" alt="清蒸黄花鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>清蒸黄花鱼</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">清蒸黄花鱼</div>
+        <div class="dish-price">$33</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="酸菜鱼" data-price="$38">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/fan_qie_ji_dan_tang.jpg" alt="酸菜鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>酸菜鱼</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">酸菜鱼</div>
+        <div class="dish-price">$38</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="避风塘大暴龙" data-price="$47">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/fei_chang.jpg" alt="避风塘大暴龙" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>避风塘大暴龙</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">避风塘大暴龙</div>
+        <div class="dish-price">$47</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="火爆牛肝" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_火爆牛肝.jpg" alt="火爆牛肝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>火爆牛肝</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">火爆牛肝</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="爆炒腰花" data-price="$38">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_爆炒腰花.jpg" alt="爆炒腰花" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>爆炒腰花</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">爆炒腰花</div>
+        <div class="dish-price">$38</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="黄豆烧猪蹄" data-price="$33">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_黄豆烧猪蹄.jpg" alt="黄豆烧猪蹄" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>黄豆烧猪蹄</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">黄豆烧猪蹄</div>
+        <div class="dish-price">$33</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="蒜香排骨" data-price="$33">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/gan_guo_tu_dou_pian.jpg" alt="蒜香排骨" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蒜香排骨</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">蒜香排骨</div>
+        <div class="dish-price">$33</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="梅香扣肉" data-price="$33">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_梅香扣肉.jpg" alt="梅香扣肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>梅香扣肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">梅香扣肉</div>
+        <div class="dish-price">$33</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="双椒牛肉丝" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_双椒牛肉丝.jpg" alt="双椒牛肉丝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>双椒牛肉丝</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">双椒牛肉丝</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小炒肉" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_小炒肉.jpg" alt="小炒肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小炒肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">小炒肉</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="回锅肉" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_回锅肉.jpg" alt="回锅肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>回锅肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">回锅肉</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="孜然牛肉" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_孜然牛肉.jpg" alt="孜然牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>孜然牛肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">孜然牛肉</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="火爆肥肠" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_火爆肥肠.jpg" alt="火爆肥肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>火爆肥肠</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">火爆肥肠</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="辣子鸡" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_辣子鸡.jpg" alt="辣子鸡" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>辣子鸡</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">辣子鸡</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鱼香肉丝" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鱼香肉丝.jpg" alt="鱼香肉丝" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼香肉丝</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鱼香肉丝</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="麻婆豆腐" data-price="$16">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_麻婆豆腐.jpg" alt="麻婆豆腐" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>麻婆豆腐</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">麻婆豆腐</div>
+        <div class="dish-price">$16</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小炒干锅鸡" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_小炒干锅鸡.jpg" alt="小炒干锅鸡" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小炒干锅鸡</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">小炒干锅鸡</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小煎排骨" data-price="$35">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_小煎排骨.jpg" alt="小煎排骨" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小煎排骨</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">小煎排骨</div>
+        <div class="dish-price">$35</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="水煮牛肉片" data-price="$29">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_水煮牛肉片.jpg" alt="水煮牛肉片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>水煮牛肉片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">水煮牛肉片</div>
+        <div class="dish-price">$29</div>
+      </div>
+    </div>
+</div><div class="dish-list">
+    <div class="dish-row" data-name="干锅鸡翅" data-price="$33">
+      <span class="dish-name-text">干锅鸡翅</span>
+      <span class="dish-price-text">$33</span>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-养生汤">
+  <h2 class="category-title">养生汤 <span class="cat-count">(3)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="松茸土鸡汤" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_松茸土鸡汤.jpg" alt="松茸土鸡汤" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>松茸土鸡汤</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">松茸土鸡汤</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="番茄鸡蛋汤" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_番茄鸡蛋汤.jpg" alt="番茄鸡蛋汤" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>番茄鸡蛋汤</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">番茄鸡蛋汤</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+</div><div class="dish-list">
+    <div class="dish-row" data-name="白菜豆腐汤" data-price="$10">
+      <span class="dish-name-text">白菜豆腐汤</span>
+      <span class="dish-price-text">$10</span>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-主食类">
+  <h2 class="category-title">主食类 <span class="cat-count">(17)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="牛肉面" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/jibo.jpg" alt="牛肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛肉面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">牛肉面</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="酸菜牛肉面" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_酸菜牛肉面.jpg" alt="酸菜牛肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>酸菜牛肉面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">酸菜牛肉面</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="红烧牛肉面" data-price="$16">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_红烧牛肉面.jpg" alt="红烧牛肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>红烧牛肉面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">红烧牛肉面</div>
+        <div class="dish-price">$16</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="牛肉汤米粉" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_牛肉汤米粉.jpg" alt="牛肉汤米粉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛肉汤米粉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">牛肉汤米粉</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="炒面条" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/jiu_cai.jpg" alt="炒面条" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>炒面条</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">炒面条</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="炒面片" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/jiu_cai_ji_dan.jpg" alt="炒面片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>炒面片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">炒面片</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="烩面片" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/jizhua.jpg" alt="烩面片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>烩面片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">烩面片</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="双椒猪肉面" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_双椒猪肉面.jpg" alt="双椒猪肉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>双椒猪肉面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">双椒猪肉面</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="杂酱面" data-price="$12">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/kaomianjin.jpg" alt="杂酱面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>杂酱面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">杂酱面</div>
+        <div class="dish-price">$12</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="豌杂面" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/lamb_skewers.jpg" alt="豌杂面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>豌杂面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">豌杂面</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="凉面" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/laziji.jpg" alt="凉面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>凉面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">凉面</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="浆水面" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/lian_ou_pian.jpg" alt="浆水面" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>浆水面</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">浆水面</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="水饺" data-price="$13">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/liang_ban_ji.jpg" alt="水饺" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>水饺</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">水饺</div>
+        <div class="dish-price">$13</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="蛋炒饭" data-price="$10">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/liangbanniurou.jpg" alt="蛋炒饭" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>蛋炒饭</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">蛋炒饭</div>
+        <div class="dish-price">$10</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="什锦牛肉炒饭" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_什锦牛肉炒饭.jpg" alt="什锦牛肉炒饭" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>什锦牛肉炒饭</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">什锦牛肉炒饭</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="加牛肉" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/lurou_pinpan.jpg" alt="加牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>加牛肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">加牛肉</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小碗炖牛肉" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/mabuyugan_gan.jpg" alt="小碗炖牛肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小碗炖牛肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">小碗炖牛肉</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-烧烤牛羊类">
+  <h2 class="category-title">烧烤牛羊类 <span class="cat-count">(7)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="羊肉串" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_羊肉串.jpg" alt="羊肉串" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>羊肉串</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">羊肉串</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="牛肉串" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/mao_xue_wang.jpg" alt="牛肉串" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛肉串</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">牛肉串</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="牛板筋" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/maoxuewang.jpg" alt="牛板筋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛板筋</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">牛板筋</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="熟牛筋" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_熟牛筋.jpg" alt="熟牛筋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>熟牛筋</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">熟牛筋</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="牛心管" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/matsutake_chicken_soup.jpg" alt="牛心管" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>牛心管</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">牛心管</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="烤羊排" data-price="$38">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/mayishangshu.jpg" alt="烤羊排" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>烤羊排</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">烤羊排</div>
+        <div class="dish-price">$38</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="羊腰" data-price="$7">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/mei_xiang_kou_rou.jpg" alt="羊腰" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>羊腰</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">羊腰</div>
+        <div class="dish-price">$7</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-烧烤鸡货类">
+  <h2 class="category-title">烧烤鸡货类 <span class="cat-count">(7)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="鸡爪" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/nian_gao.jpg" alt="鸡爪" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡爪</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鸡爪</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鸡脖" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/niu_ban_jin.jpg" alt="鸡脖" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡脖</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鸡脖</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鸡腿" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/niurou_chuan.jpg" alt="鸡腿" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡腿</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鸡腿</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="翅中" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/niuroutang_mifen.jpg" alt="翅中" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>翅中</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">翅中</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="骨肉相连" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_骨肉相连.jpg" alt="骨肉相连" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>骨肉相连</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">骨肉相连</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鸡柳" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鸡柳.jpg" alt="鸡柳" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸡柳</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鸡柳</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鸽子" data-price="$24">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鸽子.jpg" alt="鸽子" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鸽子</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鸽子</div>
+        <div class="dish-price">$24</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-烧烤猪肉类">
+  <h2 class="category-title">烧烤猪肉类 <span class="cat-count">(4)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="五花肉" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_五花肉.jpg" alt="五花肉" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>五花肉</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">五花肉</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="肥肠" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_肥肠.jpg" alt="肥肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>肥肠</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">肥肠</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="猪蹄" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_猪蹄.jpg" alt="猪蹄" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>猪蹄</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">猪蹄</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="风干大油边" data-price="$8">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/pork_intestine_bbq.jpg" alt="风干大油边" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>风干大油边</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">风干大油边</div>
+        <div class="dish-price">$8</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-烧烤海鲜类">
+  <h2 class="category-title">烧烤海鲜类 <span class="cat-count">(5)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="马步鱼干" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_马步鱼干.jpg" alt="马步鱼干" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>马步鱼干</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">马步鱼干</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鲜墨鱼" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鲜墨鱼.jpg" alt="鲜墨鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鲜墨鱼</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鲜墨鱼</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="小黄花鱼" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_小黄花鱼.jpg" alt="小黄花鱼" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>小黄花鱼</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">小黄花鱼</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="大虾" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_大虾.jpg" alt="大虾" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>大虾</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">大虾</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="手撕鱿鱼干" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/shijin_niurou_chaofan.jpg" alt="手撕鱿鱼干" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>手撕鱿鱼干</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">手撕鱿鱼干</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-烧烤蔬菜类">
+  <h2 class="category-title">烧烤蔬菜类 <span class="cat-count">(16)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="土豆片" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_土豆片.jpg" alt="土豆片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>土豆片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">土豆片</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="大蒜" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/shrimp_balls.jpg" alt="大蒜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>大蒜</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">大蒜</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="培根金针菇" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/shu_niu_jin.jpg" alt="培根金针菇" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>培根金针菇</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">培根金针菇</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鱼子丸" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鱼子丸.jpg" alt="鱼子丸" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼子丸</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鱼子丸</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="虾子丸" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_虾子丸.jpg" alt="虾子丸" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>虾子丸</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">虾子丸</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="鱼豆腐" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_鱼豆腐.jpg" alt="鱼豆腐" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>鱼豆腐</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">鱼豆腐</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="千叶豆腐" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_千叶豆腐.jpg" alt="千叶豆腐" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>千叶豆腐</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">千叶豆腐</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="韭菜" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/sour_spicy_cabbage.jpg" alt="韭菜" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>韭菜</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">韭菜</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="菜花" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_菜花.jpg" alt="菜花" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>菜花</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">菜花</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="菜卷" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_菜卷.jpg" alt="菜卷" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>菜卷</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">菜卷</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="莲藕片" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/stir_fried_intestines.jpg" alt="莲藕片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>莲藕片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">莲藕片</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="茄子" data-price="$7">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/stir_fried_noodle_slices.jpg" alt="茄子" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>茄子</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">茄子</div>
+        <div class="dish-price">$7</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="年糕" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/stir_fried_pork.jpg" alt="年糕" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>年糕</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">年糕</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="馒头片" data-price="$1">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_馒头片.jpg" alt="馒头片" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>馒头片</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">馒头片</div>
+        <div class="dish-price">$1</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="烤面筋" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/suan_la_lian_bai.jpg" alt="烤面筋" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>烤面筋</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">烤面筋</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+</div><div class="dish-list">
+    <div class="dish-row" data-name="尖椒" data-price="$3">
+      <span class="dish-name-text">尖椒</span>
+      <span class="dish-price-text">$3</span>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-烤肠类">
+  <h2 class="category-title">烤肠类 <span class="cat-count">(3)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="热狗肠" data-price="$4">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/suan_la_tu_dou_si.jpg" alt="热狗肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>热狗肠</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">热狗肠</div>
+        <div class="dish-price">$4</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="火腿肠" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/suan_rong_huang_gua.jpg" alt="火腿肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>火腿肠</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">火腿肠</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="脆骨肠" data-price="$3">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_脆骨肠.jpg" alt="脆骨肠" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>脆骨肠</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">脆骨肠</div>
+        <div class="dish-price">$3</div>
+      </div>
+    </div>
+</div>
+</section>
+<section class="category-section" id="cat-锡纸盒类">
+  <h2 class="category-title">锡纸盒类 <span class="cat-count">(3)</span></h2>
+  <div class="dish-grid">
+    <div class="dish-card" data-name="锡纸金针菇" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_锡纸金针菇.jpg" alt="锡纸金针菇" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>锡纸金针菇</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">锡纸金针菇</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+    <div class="dish-card" data-name="锡纸花甲" data-price="$20">
+      <div class="dish-img-wrap">
+        <img class="dish-img" src="images/user_锡纸花甲.jpg" alt="锡纸花甲" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'no-img-placeholder\'>锡纸花甲</div>'">
+      </div>
+      <div class="dish-info">
+        <div class="dish-name">锡纸花甲</div>
+        <div class="dish-price">$20</div>
+      </div>
+    </div>
+</div><div class="dish-list">
+    <div class="dish-row" data-name="锡纸鸭血" data-price="$20">
+      <span class="dish-name-text">锡纸鸭血</span>
+      <span class="dish-price-text">$20</span>
+    </div>
+</div>
+</section>
+  <div class="no-result" id="noResult">😕 没有找到相关菜品，请尝试其他关键词</div>
+</main>
 
-    <section class="category-section" id="养生汤">
-      <div class="category-header">
-        <h2 class="category-title">养生汤</h2>
-        <span class="category-count">3 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/huo_tui_chang.jpg" alt="松茸土鸡汤" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">松茸土鸡汤</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jian_jiao.jpg" alt="番茄鸡蛋汤" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">番茄鸡蛋汤</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-      </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">白菜豆腐汤</span>
-        <span class="dish-price-text">$10</span>
-      </div>
-      </div>
-    </section>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</button>
 
-    <section class="category-section" id="主食类">
-      <div class="category-header">
-        <h2 class="category-title">主食类</h2>
-        <span class="category-count">17 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jibo.jpg" alt="牛肉面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">牛肉面</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jiliu.jpg" alt="红烧牛肉面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">红烧牛肉面</div>
-            <div class="dish-price">$16</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jitui.jpg" alt="牛肉汤米粉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">牛肉汤米粉</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jiu_cai.jpg" alt="炒面条" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">炒面条</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jiu_cai_ji_dan.jpg" alt="炒面片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">炒面片</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/jizhua.jpg" alt="烩面片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">烩面片</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/kao_yang_pai.jpg" alt="双椒猪肉面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">双椒猪肉面</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/kaomianjin.jpg" alt="杂酱面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">杂酱面</div>
-            <div class="dish-price">$12</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/lamb_skewers.jpg" alt="豌杂面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">豌杂面</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/laziji.jpg" alt="凉面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">凉面</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/lian_ou_pian.jpg" alt="浆水面" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">浆水面</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/liang_ban_ji.jpg" alt="水饺" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">水饺</div>
-            <div class="dish-price">$13</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/liangbanniurou.jpg" alt="蛋炒饭" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">蛋炒饭</div>
-            <div class="dish-price">$10</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/lurou_pinpan.jpg" alt="加牛肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">加牛肉</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/mabuyugan_gan.jpg" alt="小碗炖牛肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">小碗炖牛肉</div>
-            <div class="dish-price">$20</div>
-          </div>
-        </div>
-      </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">酸菜牛肉面</span>
-        <span class="dish-price-text">$13</span>
-      </div>
-      <div class="dish-row">
-        <span class="dish-name-text">什锦牛肉炒饭</span>
-        <span class="dish-price-text">$20</span>
-      </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="烧烤牛羊类">
-      <div class="category-header">
-        <h2 class="category-title">烧烤牛羊类</h2>
-        <span class="category-count">7 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/mantou_pian.jpg" alt="羊肉串" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">羊肉串</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/mao_xue_wang.jpg" alt="牛肉串" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">牛肉串</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/maoxuewang.jpg" alt="牛板筋" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">牛板筋</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/mapo_tofu.jpg" alt="熟牛筋" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">熟牛筋</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/matsutake_chicken_soup.jpg" alt="牛心管" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">牛心管</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/mayishangshu.jpg" alt="烤羊排" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">烤羊排</div>
-            <div class="dish-price">$38</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/mei_xiang_kou_rou.jpg" alt="羊腰" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">羊腰</div>
-            <div class="dish-price">$7</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="烧烤鸡货类">
-      <div class="category-header">
-        <h2 class="category-title">烧烤鸡货类</h2>
-        <span class="category-count">7 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/nian_gao.jpg" alt="鸡爪" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鸡爪</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/niu_ban_jin.jpg" alt="鸡脖" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鸡脖</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/niurou_chuan.jpg" alt="鸡腿" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鸡腿</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/niuroutang_mifen.jpg" alt="翅中" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">翅中</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/niuxinguang.jpg" alt="鸡柳" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鸡柳</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/pea_noodles.jpg" alt="鸽子" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鸽子</div>
-            <div class="dish-price">$24</div>
-          </div>
-        </div>
-      </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">骨肉相连</span>
-        <span class="dish-price-text">$3</span>
-      </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="烧烤猪肉类">
-      <div class="category-header">
-        <h2 class="category-title">烧烤猪肉类</h2>
-        <span class="category-count">4 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/peigen_jinzhengu.jpg" alt="五花肉" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">五花肉</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/pickled_cabbage_beef_noodles.jpg" alt="肥肠" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">肥肠</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="猪蹄" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">猪蹄</div>
-            <div class="dish-price">$20</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/pork_intestine_bbq.jpg" alt="风干大油边" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">风干大油边</div>
-            <div class="dish-price">$8</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="烧烤海鲜类">
-      <div class="category-header">
-        <h2 class="category-title">烧烤海鲜类</h2>
-        <span class="category-count">5 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/qian_ye_dou_fu.jpg" alt="马步鱼干" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">马步鱼干</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/qie_zi.jpg" alt="鲜墨鱼" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鲜墨鱼</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/qing_zheng_huang_hua_yu.jpg" alt="小黄花鱼" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">小黄花鱼</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/re_gou_chang.jpg" alt="大虾" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">大虾</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shijin_niurou_chaofan.jpg" alt="手撕鱿鱼干" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">手撕鱿鱼干</div>
-            <div class="dish-price">$20</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="烧烤蔬菜类">
-      <div class="category-header">
-        <h2 class="category-title">烧烤蔬菜类</h2>
-        <span class="category-count">16 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shou_si_you_yu_gan.jpg" alt="土豆片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">土豆片</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shrimp_balls.jpg" alt="大蒜" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">大蒜</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shu_niu_jin.jpg" alt="培根金针菇" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">培根金针菇</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shuang_jiao_niu_rou_si.jpg" alt="鱼子丸" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鱼子丸</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shuang_jiao_zhu_rou_mian.jpg" alt="虾子丸" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">虾子丸</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/shui_zhu_niu_rou_pian.jpg" alt="鱼豆腐" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">鱼豆腐</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/song_rong_tu_ji_tang.jpg" alt="千叶豆腐" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">千叶豆腐</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/sour_spicy_cabbage.jpg" alt="韭菜" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">韭菜</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/special_pickles.jpg" alt="菜花" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">菜花</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/spicy_chicken.jpg" alt="菜卷" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">菜卷</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/stir_fried_intestines.jpg" alt="莲藕片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">莲藕片</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/stir_fried_noodle_slices.jpg" alt="茄子" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">茄子</div>
-            <div class="dish-price">$7</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/stir_fried_pork.jpg" alt="年糕" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">年糕</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/suan_cai_yu.jpg" alt="馒头片" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">馒头片</div>
-            <div class="dish-price">$1</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/suan_la_lian_bai.jpg" alt="烤面筋" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">烤面筋</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-      </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">尖椒</span>
-        <span class="dish-price-text">$3</span>
-      </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="烤肠类">
-      <div class="category-header">
-        <h2 class="category-title">烤肠类</h2>
-        <span class="category-count">3 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/suan_la_tu_dou_si.jpg" alt="热狗肠" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">热狗肠</div>
-            <div class="dish-price">$4</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/suan_rong_huang_gua.jpg" alt="火腿肠" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">火腿肠</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/suan_xiang_pai_gu.jpg" alt="脆骨肠" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">脆骨肠</div>
-            <div class="dish-price">$3</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="category-section" id="锡纸盒类">
-      <div class="category-header">
-        <h2 class="category-title">锡纸盒类</h2>
-        <span class="category-count">3 道菜</span>
-      </div>
-      <div class="dish-grid">
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/suancai_niuroumian.jpg" alt="锡纸金针菇" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">锡纸金针菇</div>
-            <div class="dish-price">$20</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/tese_paocai.jpg" alt="锡纸花甲" loading="lazy">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">锡纸花甲</div>
-            <div class="dish-price">$20</div>
-          </div>
-        </div>
-      </div>
-      <div class="dish-list">
-      <div class="dish-row">
-        <span class="dish-name-text">锡纸鸭血</span>
-        <span class="dish-price-text">$20</span>
-      </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- 页脚 -->
-  <footer class="footer">
-    <p>中餐厅 · 所有价格以实际为准 · 如需预定请提前一天联系</p>
-  </footer>
-
-  <!-- 回顶部按钮 -->
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部">⬆</button>
-
-  <script>
-    // 防止缓存 - 每次加载都获取最新版本
-    (function() {
-      const now = new Date().getTime();
-      const cacheKey = 'xmtx_menu_version';
-      const lastVersion = localStorage.getItem(cacheKey);
-      
-      if (lastVersion !== now.toString()) {
-        // 版本不同，清除所有缓存
-        localStorage.clear();
-        sessionStorage.clear();
-        
-        // 更新版本
-        localStorage.setItem(cacheKey, now.toString());
-        
-        // 强制刷新
-        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({type: 'SKIP_WAITING'});
-        }
-      }
-    })();
-
-    // 搜索功能
-    function searchDishes(keyword) {
-      const kw = keyword.trim().toLowerCase();
-      const sections = document.querySelectorAll('.category-section');
-      const noResult = document.getElementById('noResult');
-      const countEl = document.getElementById('searchCount');
-      let total = 0;
-
-      sections.forEach(section => {
-        const cards = section.querySelectorAll('.dish-card');
-        const rows = section.querySelectorAll('.dish-row');
-        let visible = 0;
-        
-        cards.forEach(card => {
-          const name = card.querySelector('.dish-name').textContent.toLowerCase();
-          const price = card.querySelector('.dish-price').textContent.toLowerCase();
-          const match = !kw || name.includes(kw) || price.includes(kw);
-          card.style.display = match ? '' : 'none';
-          if (match) visible++;
-        });
-        
-        rows.forEach(row => {
-          const name = row.querySelector('.dish-name-text').textContent.toLowerCase();
-          const price = row.querySelector('.dish-price-text').textContent.toLowerCase();
-          const match = !kw || name.includes(kw) || price.includes(kw);
-          row.style.display = match ? '' : 'none';
-          if (match) visible++;
-        });
-        
-        section.style.display = visible > 0 ? '' : 'none';
-        total += visible;
-      });
-
-      noResult.style.display = (kw && total === 0) ? 'block' : 'none';
-      countEl.textContent = kw ? `找到 ${total} 道菜` : '';
+<script>
+// ── 缓存清理（每次打开都强制刷新）──────────────────────────────
+(function() {
+  const CURRENT_VERSION = '1782217760';
+  const stored = localStorage.getItem('menu_version');
+  if (stored !== CURRENT_VERSION) {
+    localStorage.setItem('menu_version', CURRENT_VERSION);
+    // 清理 Service Worker 缓存
+    if ('caches' in window) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
     }
-
-    // 滚动到分类
-    function scrollToCategory(id) {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+    // 如果版本不同且不是首次访问，强制刷新
+    if (stored !== null) {
+      window.location.reload(true);
     }
+  }
+})();
 
-    // 回顶部
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // 监听滚动显示回顶部按钮
-    window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) {
-        btn.classList.add('visible');
-      } else {
-        btn.classList.remove('visible');
-      }
+// ── 搜索 ────────────────────────────────────────────────────────
+function doSearch() {
+  const kw = document.getElementById('searchInput').value.trim().toLowerCase();
+  let total = 0;
+  document.querySelectorAll('.category-section').forEach(sec => {
+    let secVisible = 0;
+    sec.querySelectorAll('.dish-card, .dish-row').forEach(el => {
+      const name = (el.dataset.name || '').toLowerCase();
+      const price = (el.dataset.price || '').toLowerCase();
+      const show = !kw || name.includes(kw) || price.includes(kw);
+      el.style.display = show ? '' : 'none';
+      if (show) secVisible++;
     });
-  </script>
+    sec.style.display = secVisible > 0 ? '' : 'none';
+    total += secVisible;
+  });
+  const noResult = document.getElementById('noResult');
+  const countEl = document.getElementById('searchCount');
+  if (kw) {
+    noResult.style.display = total === 0 ? 'block' : 'none';
+    countEl.textContent = `找到 ${total} 个菜品`;
+  } else {
+    noResult.style.display = 'none';
+    countEl.textContent = '';
+    document.querySelectorAll('.category-section').forEach(s => s.style.display = '');
+    document.querySelectorAll('.dish-card, .dish-row').forEach(el => el.style.display = '');
+  }
+}
+
+// ── 分类导航 ─────────────────────────────────────────────────────
+function scrollToSection(cat) {
+  const el = document.getElementById('cat-' + cat);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── 回顶部按钮 ───────────────────────────────────────────────────
+const btn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+});
+
+// ── 导航高亮 ─────────────────────────────────────────────────────
+const navBtns = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('.category-section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id.replace('cat-', '');
+      navBtns.forEach(b => {
+        b.classList.toggle('active', b.textContent.trim().startsWith(id));
+      });
+    }
+  });
+}, { threshold: 0.2 });
+sections.forEach(s => observer.observe(s));
+</script>
 </body>
 </html>
