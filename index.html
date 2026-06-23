@@ -181,11 +181,12 @@
       border-radius: 12px;
     }
 
-    /* 菜品网格 */
+    /* 菜品网格（有图片） */
     .dish-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 16px;
+      margin-bottom: 20px;
     }
 
     /* 菜品卡片 */
@@ -242,6 +243,51 @@
       background: linear-gradient(90deg, #FFD700, #FF6B6B);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+
+    /* 菜品列表（无图片） */
+    .dish-list {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 0;
+      margin-bottom: 20px;
+    }
+
+    .dish-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.2s;
+    }
+
+    .dish-row:last-child {
+      border-bottom: none;
+    }
+
+    .dish-row:hover {
+      background: rgba(255,255,255,0.08);
+      padding-left: 20px;
+    }
+
+    .dish-name-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #fff;
+      flex: 1;
+    }
+
+    .dish-price-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #FFD700, #FF6B6B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-left: 16px;
+      white-space: nowrap;
     }
 
     /* 无结果提示 */
@@ -302,6 +348,9 @@
     @media (max-width: 480px) {
       .dish-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .nav-btn { font-size: 0.78rem; padding: 5px 10px; }
+      .dish-row { padding: 8px 12px; }
+      .dish-name-text { font-size: 0.9rem; }
+      .dish-price-text { font-size: 0.9rem; margin-left: 8px; }
     }
   </style>
 </head>
@@ -349,7 +398,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="凉拌鸡" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/liang_ban_ji.jpg" alt="凉拌鸡" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">凉拌鸡</div>
@@ -358,7 +407,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="凉拌牛肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/liangbanniurou.jpg" alt="凉拌牛肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">凉拌牛肉</div>
@@ -367,7 +416,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/braised_meat_platter.jpg" alt="卤肉拼盘" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/lurou_pinpan.jpg" alt="卤肉拼盘" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">卤肉拼盘</div>
@@ -376,7 +425,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/zigong_cold_beef.jpg" alt="自贡冷吃牛肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/zigong_leng_chi_niu_rou.jpg" alt="自贡冷吃牛肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">自贡冷吃牛肉</div>
@@ -385,7 +434,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/garlic_cucumber.jpg" alt="蒜蓉黄瓜" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/suan_rong_huang_gua.jpg" alt="蒜蓉黄瓜" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">蒜蓉黄瓜</div>
@@ -394,7 +443,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/fried_peanuts.jpg" alt="油炸花生" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/youzhahuasheng.jpg" alt="油炸花生" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">油炸花生</div>
@@ -403,7 +452,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/special_pickles.jpg" alt="特色泡菜" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/tese_paocai.jpg" alt="特色泡菜" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">特色泡菜</div>
@@ -421,7 +470,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/dry_pot_potato.jpg" alt="干锅土豆片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/gan_guo_tu_dou_pian.jpg" alt="干锅土豆片" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">干锅土豆片</div>
@@ -430,7 +479,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="韭菜鸡蛋" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jiu_cai_ji_dan.jpg" alt="韭菜鸡蛋" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">韭菜鸡蛋</div>
@@ -439,7 +488,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/sour_spicy_cabbage.jpg" alt="酸辣莲白" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/suan_la_lian_bai.jpg" alt="酸辣莲白" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">酸辣莲白</div>
@@ -448,7 +497,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="酸辣土豆丝" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/suan_la_tu_dou_si.jpg" alt="酸辣土豆丝" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">酸辣土豆丝</div>
@@ -457,7 +506,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鱼香茄子" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/yuxiang_qiezi.jpg" alt="鱼香茄子" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼香茄子</div>
@@ -466,7 +515,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/ants_climbing_tree.jpg" alt="蚂蚁上树" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/mayishangshu.jpg" alt="蚂蚁上树" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">蚂蚁上树</div>
@@ -475,7 +524,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="西红柿鸡蛋" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xihongshi_jidanj.jpg" alt="西红柿鸡蛋" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">西红柿鸡蛋</div>
@@ -484,7 +533,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="小炒时蔬" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiao_chao_shi_shu.jpg" alt="小炒时蔬" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">小炒时蔬</div>
@@ -502,7 +551,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="爆炒鲜墨鱼" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/bao_chao_xian_mo_yu.jpg" alt="爆炒鲜墨鱼" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">爆炒鲜墨鱼</div>
@@ -511,7 +560,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="干锅鸡翅" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/gan_guo_ji_chi.jpg" alt="干锅鸡翅" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">干锅鸡翅</div>
@@ -520,7 +569,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="香辣蟹" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiang_la_xie.jpg" alt="香辣蟹" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">香辣蟹</div>
@@ -529,7 +578,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/mao_xue_wang.jpg" alt="毛血旺" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/maoxuewang.jpg" alt="毛血旺" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">毛血旺</div>
@@ -538,7 +587,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="清蒸黄花鱼" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/qing_zheng_huang_hua_yu.jpg" alt="清蒸黄花鱼" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">清蒸黄花鱼</div>
@@ -547,7 +596,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="酸菜鱼" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/suan_cai_yu.jpg" alt="酸菜鱼" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">酸菜鱼</div>
@@ -556,7 +605,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="避风塘大暴龙" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/bifengtang_dabao_long.jpg" alt="避风塘大暴龙" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">避风塘大暴龙</div>
@@ -565,7 +614,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="火爆牛肝" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/huo_bao_niu_gan.jpg" alt="火爆牛肝" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">火爆牛肝</div>
@@ -574,7 +623,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="爆炒腰花" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/baochao_yaohua.jpg" alt="爆炒腰花" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">爆炒腰花</div>
@@ -583,7 +632,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="黄豆烧猪蹄" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/huang_dou_shao_zhu_ti.jpg" alt="黄豆烧猪蹄" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">黄豆烧猪蹄</div>
@@ -592,7 +641,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="蒜香排骨" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/suan_xiang_pai_gu.jpg" alt="蒜香排骨" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">蒜香排骨</div>
@@ -601,7 +650,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="梅香扣肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/mei_xiang_kou_rou.jpg" alt="梅香扣肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">梅香扣肉</div>
@@ -610,7 +659,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="双椒牛肉丝" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/shuang_jiao_niu_rou_si.jpg" alt="双椒牛肉丝" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">双椒牛肉丝</div>
@@ -619,7 +668,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/stir_fried_pork.jpg" alt="小炒肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiao_chao_rou.jpg" alt="小炒肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">小炒肉</div>
@@ -628,7 +677,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="回锅肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/hui_guo_rou.jpg" alt="回锅肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">回锅肉</div>
@@ -637,7 +686,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="孜然牛肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/ziran_niurou.jpg" alt="孜然牛肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">孜然牛肉</div>
@@ -646,7 +695,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/stir_fried_intestines.jpg" alt="火爆肥肠" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/huo_bao_fei_chang.jpg" alt="火爆肥肠" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">火爆肥肠</div>
@@ -655,7 +704,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/spicy_chicken.jpg" alt="辣子鸡" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/laziji.jpg" alt="辣子鸡" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">辣子鸡</div>
@@ -664,7 +713,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鱼香肉丝" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/yu_xiang_rou_si.jpg" alt="鱼香肉丝" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼香肉丝</div>
@@ -673,7 +722,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/mapo_tofu.jpg" alt="麻婆豆腐" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/mapo_tofu.jpg" alt="麻婆豆腐" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">麻婆豆腐</div>
@@ -682,7 +731,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="小炒干锅鸡" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiao_chao_gan_guo_ji.jpg" alt="小炒干锅鸡" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">小炒干锅鸡</div>
@@ -691,7 +740,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="小煎排骨" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiao_jian_pai_gu.jpg" alt="小煎排骨" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">小煎排骨</div>
@@ -700,7 +749,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="水煮牛肉片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/shui_zhu_niu_rou_pian.jpg" alt="水煮牛肉片" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">水煮牛肉片</div>
@@ -718,7 +767,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/matsutake_chicken_soup.jpg" alt="松茸土鸡汤" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/song_rong_tu_ji_tang.jpg" alt="松茸土鸡汤" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">松茸土鸡汤</div>
@@ -727,7 +776,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="番茄鸡蛋汤" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/fan_qie_ji_dan_tang.jpg" alt="番茄鸡蛋汤" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">番茄鸡蛋汤</div>
@@ -736,7 +785,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="白菜豆腐汤" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/baicai_doufu_tang.jpg" alt="白菜豆腐汤" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">白菜豆腐汤</div>
@@ -754,16 +803,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="牛肉面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">牛肉面</div>
-            <div class="dish-price">GNF104000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/pickled_cabbage_beef_noodles.jpg" alt="酸菜牛肉面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/suancai_niuroumian.jpg" alt="酸菜牛肉面" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">酸菜牛肉面</div>
@@ -772,7 +812,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/braised_beef_noodles.jpg" alt="红烧牛肉面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/hong_shao_niu_rou_mian.jpg" alt="红烧牛肉面" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">红烧牛肉面</div>
@@ -781,7 +821,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="牛肉汤米粉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/niuroutang_mifen.jpg" alt="牛肉汤米粉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">牛肉汤米粉</div>
@@ -790,34 +830,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="炒面条" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">炒面条</div>
-            <div class="dish-price">GNF130000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/stir_fried_noodle_slices.jpg" alt="炒面片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">炒面片</div>
-            <div class="dish-price">GNF130000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="烩面片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">烩面片</div>
-            <div class="dish-price">GNF130000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/double_pepper_pork_noodles.jpg" alt="双椒猪肉面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/shuang_jiao_zhu_rou_mian.jpg" alt="双椒猪肉面" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">双椒猪肉面</div>
@@ -826,61 +839,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/zha_jiang_noodles.jpg" alt="杂酱面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">杂酱面</div>
-            <div class="dish-price">GNF117000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/pea_noodles.jpg" alt="豌杂面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">豌杂面</div>
-            <div class="dish-price">GNF104000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="凉面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">凉面</div>
-            <div class="dish-price">GNF130000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="浆水面" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">浆水面</div>
-            <div class="dish-price">GNF104000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="水饺" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">水饺</div>
-            <div class="dish-price">GNF130000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/egg_fried_rice.jpg" alt="蛋炒饭" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">蛋炒饭</div>
-            <div class="dish-price">GNF104000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="什锦牛肉炒饭" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/shijin_niurou_chaofan.jpg" alt="什锦牛肉炒饭" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">什锦牛肉炒饭</div>
@@ -889,22 +848,59 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="加牛肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">加牛肉</div>
-            <div class="dish-price">GNF39000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="小碗炖牛肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiao_wan_dun_niu_rou.jpg" alt="小碗炖牛肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">小碗炖牛肉</div>
             <div class="dish-price">GNF195000</div>
           </div>
         </div>
+      </div>
+      <div class="dish-list">
+      <div class="dish-row">
+        <span class="dish-name-text">牛肉面</span>
+        <span class="dish-price-text">GNF104000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">炒面条</span>
+        <span class="dish-price-text">GNF130000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">炒面片</span>
+        <span class="dish-price-text">GNF130000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">烩面片</span>
+        <span class="dish-price-text">GNF130000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">杂酱面</span>
+        <span class="dish-price-text">GNF117000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">豌杂面</span>
+        <span class="dish-price-text">GNF104000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">凉面</span>
+        <span class="dish-price-text">GNF130000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">浆水面</span>
+        <span class="dish-price-text">GNF104000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">水饺</span>
+        <span class="dish-price-text">GNF130000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">蛋炒饭</span>
+        <span class="dish-price-text">GNF104000</span>
+      </div>
+      <div class="dish-row">
+        <span class="dish-name-text">加牛肉</span>
+        <span class="dish-price-text">GNF39000</span>
+      </div>
       </div>
     </section>
 
@@ -916,7 +912,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/lamb_skewers.jpg" alt="羊肉串" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/yang_rou_chuan.jpg" alt="羊肉串" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">羊肉串</div>
@@ -925,7 +921,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="牛肉串" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/niurou_chuan.jpg" alt="牛肉串" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">牛肉串</div>
@@ -934,7 +930,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="牛板筋" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/niu_ban_jin.jpg" alt="牛板筋" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">牛板筋</div>
@@ -943,7 +939,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="熟牛筋" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/shu_niu_jin.jpg" alt="熟牛筋" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">熟牛筋</div>
@@ -952,7 +948,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="牛心管" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/niuxinguang.jpg" alt="牛心管" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">牛心管</div>
@@ -961,7 +957,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="烤羊排" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/kao_yang_pai.jpg" alt="烤羊排" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">烤羊排</div>
@@ -970,7 +966,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="羊腰" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/yang_yao.jpg" alt="羊腰" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">羊腰</div>
@@ -988,7 +984,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鸡爪" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jizhua.jpg" alt="鸡爪" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡爪</div>
@@ -997,7 +993,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/chicken_neck_bbq.jpg" alt="鸡脖" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jibo.jpg" alt="鸡脖" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡脖</div>
@@ -1006,7 +1002,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/chicken_leg_bbq.jpg" alt="鸡腿" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jitui.jpg" alt="鸡腿" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡腿</div>
@@ -1015,7 +1011,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="翅中" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/chizhong.jpg" alt="翅中" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">翅中</div>
@@ -1024,7 +1020,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="骨肉相连" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/gurouxianglian.jpg" alt="骨肉相连" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">骨肉相连</div>
@@ -1033,7 +1029,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鸡柳" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jiliu.jpg" alt="鸡柳" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡柳</div>
@@ -1042,7 +1038,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鸽子" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/ge_zi.jpg" alt="鸽子" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鸽子</div>
@@ -1060,7 +1056,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="五花肉" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/wuhuarou.jpg" alt="五花肉" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">五花肉</div>
@@ -1069,7 +1065,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/pork_intestine_bbq.jpg" alt="肥肠" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/fei_chang.jpg" alt="肥肠" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">肥肠</div>
@@ -1078,7 +1074,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="猪蹄" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/zhu_ti.jpg" alt="猪蹄" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">猪蹄</div>
@@ -1087,7 +1083,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="风干大油边" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/feng_gan_da_you_bian.jpg" alt="风干大油边" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">风干大油边</div>
@@ -1105,7 +1101,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/dried_small_fish.jpg" alt="马步鱼干" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/mabuyugan_gan.jpg" alt="马步鱼干" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">马步鱼干</div>
@@ -1114,7 +1110,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鲜墨鱼" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xian_mo_yu.jpg" alt="鲜墨鱼" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鲜墨鱼</div>
@@ -1123,7 +1119,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="小黄花鱼" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xiao_huang_hua_yu.jpg" alt="小黄花鱼" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">小黄花鱼</div>
@@ -1132,7 +1128,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="大虾" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/da_xia.jpg" alt="大虾" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">大虾</div>
@@ -1141,7 +1137,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="手撕鱿鱼干" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/shou_si_you_yu_gan.jpg" alt="手撕鱿鱼干" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">手撕鱿鱼干</div>
@@ -1159,7 +1155,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="土豆片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/tu_dou_pian.jpg" alt="土豆片" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">土豆片</div>
@@ -1168,16 +1164,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/grilled_garlic.jpg" alt="大蒜" loading="lazy" onerror="this.src='images/placeholder.jpg'">
-          </div>
-          <div class="dish-info">
-            <div class="dish-name">大蒜</div>
-            <div class="dish-price">GNF13000</div>
-          </div>
-        </div>
-        <div class="dish-card">
-          <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="培根金针菇" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/peigen_jinzhengu.jpg" alt="培根金针菇" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">培根金针菇</div>
@@ -1186,7 +1173,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鱼子丸" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/yuziwan.jpg" alt="鱼子丸" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼子丸</div>
@@ -1195,7 +1182,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/shrimp_balls.jpg" alt="虾子丸" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/xia_zi_wan.jpg" alt="虾子丸" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">虾子丸</div>
@@ -1204,7 +1191,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="鱼豆腐" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/yu_dou_fu.jpg" alt="鱼豆腐" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼豆腐</div>
@@ -1213,7 +1200,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="千叶豆腐" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/qian_ye_dou_fu.jpg" alt="千叶豆腐" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">千叶豆腐</div>
@@ -1222,7 +1209,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="尖椒" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jian_jiao.jpg" alt="尖椒" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">尖椒</div>
@@ -1231,7 +1218,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="韭菜" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/jiu_cai.jpg" alt="韭菜" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">韭菜</div>
@@ -1240,7 +1227,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="菜花" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/ziran_zha_yecaihua.jpg" alt="菜花" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">菜花</div>
@@ -1249,7 +1236,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="菜卷" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/cai_juan.jpg" alt="菜卷" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">菜卷</div>
@@ -1258,7 +1245,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="莲藕片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/lian_ou_pian.jpg" alt="莲藕片" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">莲藕片</div>
@@ -1267,7 +1254,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/grilled_eggplant.jpg" alt="茄子" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/qie_zi.jpg" alt="茄子" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">茄子</div>
@@ -1276,7 +1263,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="年糕" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/nian_gao.jpg" alt="年糕" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">年糕</div>
@@ -1285,7 +1272,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="馒头片" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/mantou_pian.jpg" alt="馒头片" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">馒头片</div>
@@ -1294,13 +1281,19 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="烤面筋" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/kaomianjin.jpg" alt="烤面筋" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">烤面筋</div>
             <div class="dish-price">GNF26000</div>
           </div>
         </div>
+      </div>
+      <div class="dish-list">
+      <div class="dish-row">
+        <span class="dish-name-text">大蒜</span>
+        <span class="dish-price-text">GNF13000</span>
+      </div>
       </div>
     </section>
 
@@ -1312,7 +1305,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/hot_dog_sausage.jpg" alt="热狗肠" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/re_gou_chang.jpg" alt="热狗肠" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">热狗肠</div>
@@ -1321,7 +1314,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="火腿肠" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/huo_tui_chang.jpg" alt="火腿肠" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">火腿肠</div>
@@ -1330,7 +1323,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="脆骨肠" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/cuiguchang.jpg" alt="脆骨肠" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">脆骨肠</div>
@@ -1348,7 +1341,7 @@
       <div class="dish-grid">
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="锡纸金针菇" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/placeholder.jpg" alt="锡纸金针菇" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">锡纸金针菇</div>
@@ -1357,7 +1350,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="锡纸花甲" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/placeholder.jpg" alt="锡纸花甲" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">锡纸花甲</div>
@@ -1366,7 +1359,7 @@
         </div>
         <div class="dish-card">
           <div class="dish-img-wrap">
-            <img src="images/placeholder.jpg" alt="锡纸鸭血" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+            <img src="images/placeholder.jpg" alt="锡纸鸭血" loading="lazy">
           </div>
           <div class="dish-info">
             <div class="dish-name">锡纸鸭血</div>
@@ -1396,7 +1389,9 @@
 
       sections.forEach(section => {
         const cards = section.querySelectorAll('.dish-card');
+        const rows = section.querySelectorAll('.dish-row');
         let visible = 0;
+        
         cards.forEach(card => {
           const name = card.querySelector('.dish-name').textContent.toLowerCase();
           const price = card.querySelector('.dish-price').textContent.toLowerCase();
@@ -1404,6 +1399,15 @@
           card.style.display = match ? '' : 'none';
           if (match) visible++;
         });
+        
+        rows.forEach(row => {
+          const name = row.querySelector('.dish-name-text').textContent.toLowerCase();
+          const price = row.querySelector('.dish-price-text').textContent.toLowerCase();
+          const match = !kw || name.includes(kw) || price.includes(kw);
+          row.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        
         section.style.display = visible > 0 ? '' : 'none';
         total += visible;
       });
