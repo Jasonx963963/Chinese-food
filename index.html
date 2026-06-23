@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>🍜 香满天下饭店菜单</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -10,27 +13,28 @@
     body {
       font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #533483 100%);
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 30%, #dfe9f3 60%, #e8e5f5 100%);
       background-attachment: fixed;
-      color: #fff;
+      color: #2c3e50;
     }
 
     /* 顶部 Banner */
     .header {
       text-align: center;
       padding: 40px 20px 20px;
-      background: rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,255,0.95) 100%);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(200,180,220,0.2);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
     .header h1 {
       font-size: clamp(1.8rem, 5vw, 3rem);
       font-weight: 900;
-      background: linear-gradient(90deg, #FFD700, #FF6B6B, #4ECDC4, #FFD700);
+      background: linear-gradient(90deg, #8B5CF6, #EC4899, #F59E0B, #8B5CF6);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -45,15 +49,17 @@
 
     .header-subtitle {
       font-size: clamp(0.85rem, 2vw, 1rem);
-      color: #FFD700;
+      color: #8B5CF6;
       letter-spacing: 2px;
       margin-bottom: 6px;
+      font-weight: 600;
     }
 
     .header-welcome {
       font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-      color: #FF9EAA;
+      color: #EC4899;
       letter-spacing: 1px;
+      font-weight: 500;
     }
 
     /* 搜索框 */
@@ -67,17 +73,21 @@
       width: 100%;
       padding: 12px 50px 12px 20px;
       border-radius: 30px;
-      border: 2px solid rgba(255,215,0,0.5);
-      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(139,92,246,0.3);
+      background: rgba(139,92,246,0.05);
       backdrop-filter: blur(10px);
-      color: #fff;
+      color: #2c3e50;
       font-size: 1rem;
       outline: none;
       transition: all 0.3s;
     }
 
-    .search-input::placeholder { color: rgba(255,255,255,0.5); }
-    .search-input:focus { border-color: #FFD700; background: rgba(255,255,255,0.15); }
+    .search-input::placeholder { color: rgba(44,62,80,0.4); }
+    .search-input:focus { 
+      border-color: #8B5CF6; 
+      background: rgba(139,92,246,0.1);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+    }
 
     .search-icon {
       position: absolute;
@@ -89,7 +99,7 @@
 
     .search-result-count {
       text-align: center;
-      color: rgba(255,255,255,0.7);
+      color: rgba(44,62,80,0.6);
       font-size: 0.85rem;
       margin-top: 6px;
       min-height: 20px;
@@ -100,16 +110,17 @@
       max-width: 1400px;
       margin: 0 auto;
       padding: 16px 20px;
-      background: rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.7);
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(200,180,220,0.15);
     }
 
     .nav-title {
       font-size: 0.85rem;
-      color: rgba(255,255,255,0.5);
+      color: rgba(44,62,80,0.6);
       margin-bottom: 10px;
       letter-spacing: 1px;
+      font-weight: 600;
     }
 
     .nav-buttons {
@@ -121,23 +132,25 @@
     .nav-btn {
       padding: 6px 14px;
       border-radius: 20px;
-      border: 1px solid rgba(255,215,0,0.4);
-      background: rgba(255,215,0,0.1);
-      color: #FFD700;
+      border: 1px solid rgba(139,92,246,0.3);
+      background: rgba(139,92,246,0.08);
+      color: #8B5CF6;
       font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.3s;
       white-space: nowrap;
+      font-weight: 500;
     }
 
     .nav-btn:hover, .nav-btn.active {
-      background: rgba(255,215,0,0.3);
-      border-color: #FFD700;
+      background: rgba(139,92,246,0.2);
+      border-color: #8B5CF6;
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139,92,246,0.15);
     }
 
     .count-badge {
-      background: rgba(255,215,0,0.3);
+      background: rgba(139,92,246,0.2);
       border-radius: 10px;
       padding: 1px 6px;
       font-size: 0.75rem;
@@ -163,20 +176,20 @@
       gap: 12px;
       margin-bottom: 16px;
       padding-bottom: 10px;
-      border-bottom: 2px solid rgba(255,215,0,0.3);
+      border-bottom: 2px solid rgba(139,92,246,0.2);
     }
 
     .category-title {
       font-size: clamp(1.2rem, 3vw, 1.6rem);
       font-weight: 700;
-      color: #FFD700;
+      color: #8B5CF6;
       letter-spacing: 2px;
     }
 
     .category-count {
       font-size: 0.85rem;
-      color: rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.1);
+      color: rgba(44,62,80,0.5);
+      background: rgba(139,92,246,0.08);
       padding: 2px 10px;
       border-radius: 12px;
     }
@@ -191,27 +204,28 @@
 
     /* 菜品卡片 */
     .dish-card {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.8);
       backdrop-filter: blur(10px);
       border-radius: 16px;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(139,92,246,0.15);
       transition: all 0.3s ease;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .dish-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-      border-color: rgba(255,215,0,0.5);
-      background: rgba(255,255,255,0.12);
+      box-shadow: 0 12px 30px rgba(139,92,246,0.15);
+      border-color: rgba(139,92,246,0.4);
+      background: rgba(255,255,255,0.95);
     }
 
     .dish-img-wrap {
       width: 100%;
       aspect-ratio: 4/3;
       overflow: hidden;
-      background: rgba(0,0,0,0.2);
+      background: linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(236,72,153,0.05) 100%);
     }
 
     .dish-img-wrap img {
@@ -232,7 +246,7 @@
     .dish-name {
       font-size: clamp(0.85rem, 2vw, 0.95rem);
       font-weight: 600;
-      color: #fff;
+      color: #2c3e50;
       margin-bottom: 6px;
       line-height: 1.3;
     }
@@ -240,19 +254,20 @@
     .dish-price {
       font-size: clamp(0.9rem, 2vw, 1rem);
       font-weight: 700;
-      background: linear-gradient(90deg, #FFD700, #FF6B6B);
+      background: linear-gradient(90deg, #8B5CF6, #EC4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     /* 菜品列表（无图片） */
     .dish-list {
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.6);
       backdrop-filter: blur(8px);
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(139,92,246,0.15);
       padding: 12px 0;
       margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
 
     .dish-row {
@@ -260,7 +275,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(139,92,246,0.08);
       transition: all 0.2s;
     }
 
@@ -269,21 +284,21 @@
     }
 
     .dish-row:hover {
-      background: rgba(255,255,255,0.08);
+      background: rgba(139,92,246,0.05);
       padding-left: 20px;
     }
 
     .dish-name-text {
       font-size: 0.95rem;
       font-weight: 500;
-      color: #fff;
+      color: #2c3e50;
       flex: 1;
     }
 
     .dish-price-text {
       font-size: 0.95rem;
       font-weight: 700;
-      background: linear-gradient(90deg, #FFD700, #FF6B6B);
+      background: linear-gradient(90deg, #8B5CF6, #EC4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-left: 16px;
@@ -295,7 +310,7 @@
       display: none;
       text-align: center;
       padding: 60px 20px;
-      color: rgba(255,255,255,0.5);
+      color: rgba(44,62,80,0.5);
       font-size: 1.1rem;
     }
 
@@ -307,7 +322,7 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #FFD700, #FF6B6B);
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
       color: #fff;
       font-size: 1.4rem;
       border: none;
@@ -315,14 +330,14 @@
       display: none;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+      box-shadow: 0 4px 15px rgba(139,92,246,0.3);
       transition: all 0.3s;
       z-index: 999;
     }
 
     .back-to-top:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(255,107,107,0.6);
+      box-shadow: 0 8px 25px rgba(139,92,246,0.4);
     }
 
     .back-to-top.visible { display: flex; }
@@ -331,9 +346,9 @@
     .footer {
       text-align: center;
       padding: 30px 20px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(44,62,80,0.4);
       font-size: 0.85rem;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      border-top: 1px solid rgba(139,92,246,0.1);
       margin-top: 20px;
     }
 
@@ -402,7 +417,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">凉拌鸡</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -411,7 +426,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">凉拌牛肉</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -420,7 +435,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">卤肉拼盘</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -429,7 +444,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">自贡冷吃牛肉</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
         <div class="dish-card">
@@ -438,7 +453,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">蒜蓉黄瓜</div>
-            <div class="dish-price">$12.24</div>
+            <div class="dish-price">$12</div>
           </div>
         </div>
         <div class="dish-card">
@@ -447,7 +462,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">油炸花生</div>
-            <div class="dish-price">$9.18</div>
+            <div class="dish-price">$9</div>
           </div>
         </div>
         <div class="dish-card">
@@ -456,7 +471,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">特色泡菜</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
       </div>
@@ -474,7 +489,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">干锅土豆片</div>
-            <div class="dish-price">$18.35</div>
+            <div class="dish-price">$18</div>
           </div>
         </div>
         <div class="dish-card">
@@ -483,7 +498,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">韭菜鸡蛋</div>
-            <div class="dish-price">$15.29</div>
+            <div class="dish-price">$15</div>
           </div>
         </div>
         <div class="dish-card">
@@ -492,7 +507,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">酸辣莲白</div>
-            <div class="dish-price">$12.24</div>
+            <div class="dish-price">$12</div>
           </div>
         </div>
         <div class="dish-card">
@@ -501,7 +516,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">酸辣土豆丝</div>
-            <div class="dish-price">$15.29</div>
+            <div class="dish-price">$15</div>
           </div>
         </div>
         <div class="dish-card">
@@ -510,7 +525,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼香茄子</div>
-            <div class="dish-price">$24.47</div>
+            <div class="dish-price">$24</div>
           </div>
         </div>
         <div class="dish-card">
@@ -519,7 +534,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">蚂蚁上树</div>
-            <div class="dish-price">$18.35</div>
+            <div class="dish-price">$18</div>
           </div>
         </div>
         <div class="dish-card">
@@ -528,7 +543,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">西红柿鸡蛋</div>
-            <div class="dish-price">$15.29</div>
+            <div class="dish-price">$15</div>
           </div>
         </div>
         <div class="dish-card">
@@ -537,7 +552,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">小炒时蔬</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
       </div>
@@ -555,7 +570,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">爆炒鲜墨鱼</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
         <div class="dish-card">
@@ -564,7 +579,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">干锅鸡翅</div>
-            <div class="dish-price">$38.24</div>
+            <div class="dish-price">$38</div>
           </div>
         </div>
         <div class="dish-card">
@@ -573,7 +588,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">香辣蟹</div>
-            <div class="dish-price">$42.82</div>
+            <div class="dish-price">$43</div>
           </div>
         </div>
         <div class="dish-card">
@@ -582,7 +597,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">毛血旺</div>
-            <div class="dish-price">$42.82</div>
+            <div class="dish-price">$43</div>
           </div>
         </div>
         <div class="dish-card">
@@ -591,7 +606,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">清蒸黄花鱼</div>
-            <div class="dish-price">$38.24</div>
+            <div class="dish-price">$38</div>
           </div>
         </div>
         <div class="dish-card">
@@ -600,7 +615,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">酸菜鱼</div>
-            <div class="dish-price">$42.82</div>
+            <div class="dish-price">$43</div>
           </div>
         </div>
         <div class="dish-card">
@@ -609,7 +624,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">避风塘大暴龙</div>
-            <div class="dish-price">$53.53</div>
+            <div class="dish-price">$54</div>
           </div>
         </div>
         <div class="dish-card">
@@ -618,7 +633,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">火爆牛肝</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -627,7 +642,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">爆炒腰花</div>
-            <div class="dish-price">$42.82</div>
+            <div class="dish-price">$43</div>
           </div>
         </div>
         <div class="dish-card">
@@ -636,7 +651,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">黄豆烧猪蹄</div>
-            <div class="dish-price">$38.24</div>
+            <div class="dish-price">$38</div>
           </div>
         </div>
         <div class="dish-card">
@@ -645,7 +660,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">蒜香排骨</div>
-            <div class="dish-price">$38.24</div>
+            <div class="dish-price">$38</div>
           </div>
         </div>
         <div class="dish-card">
@@ -654,7 +669,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">梅香扣肉</div>
-            <div class="dish-price">$38.24</div>
+            <div class="dish-price">$38</div>
           </div>
         </div>
         <div class="dish-card">
@@ -663,7 +678,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">双椒牛肉丝</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
         <div class="dish-card">
@@ -672,7 +687,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">小炒肉</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -681,7 +696,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">回锅肉</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -690,7 +705,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">孜然牛肉</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
         <div class="dish-card">
@@ -699,7 +714,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">火爆肥肠</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
         <div class="dish-card">
@@ -708,7 +723,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">辣子鸡</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
         <div class="dish-card">
@@ -717,7 +732,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼香肉丝</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
         <div class="dish-card">
@@ -726,7 +741,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">麻婆豆腐</div>
-            <div class="dish-price">$18.35</div>
+            <div class="dish-price">$18</div>
           </div>
         </div>
         <div class="dish-card">
@@ -735,7 +750,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">小炒干锅鸡</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -744,7 +759,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">小煎排骨</div>
-            <div class="dish-price">$39.76</div>
+            <div class="dish-price">$40</div>
           </div>
         </div>
         <div class="dish-card">
@@ -753,7 +768,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">水煮牛肉片</div>
-            <div class="dish-price">$33.65</div>
+            <div class="dish-price">$34</div>
           </div>
         </div>
       </div>
@@ -771,7 +786,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">松茸土鸡汤</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
         <div class="dish-card">
@@ -780,7 +795,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">番茄鸡蛋汤</div>
-            <div class="dish-price">$15.29</div>
+            <div class="dish-price">$15</div>
           </div>
         </div>
         <div class="dish-card">
@@ -789,7 +804,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">白菜豆腐汤</div>
-            <div class="dish-price">$12.24</div>
+            <div class="dish-price">$12</div>
           </div>
         </div>
       </div>
@@ -807,7 +822,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">酸菜牛肉面</div>
-            <div class="dish-price">$15.29</div>
+            <div class="dish-price">$15</div>
           </div>
         </div>
         <div class="dish-card">
@@ -816,7 +831,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">红烧牛肉面</div>
-            <div class="dish-price">$18.35</div>
+            <div class="dish-price">$18</div>
           </div>
         </div>
         <div class="dish-card">
@@ -825,7 +840,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">牛肉汤米粉</div>
-            <div class="dish-price">$12.24</div>
+            <div class="dish-price">$12</div>
           </div>
         </div>
         <div class="dish-card">
@@ -834,7 +849,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">双椒猪肉面</div>
-            <div class="dish-price">$12.24</div>
+            <div class="dish-price">$12</div>
           </div>
         </div>
         <div class="dish-card">
@@ -843,7 +858,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">什锦牛肉炒饭</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
         <div class="dish-card">
@@ -852,54 +867,54 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">小碗炖牛肉</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
       </div>
       <div class="dish-list">
       <div class="dish-row">
         <span class="dish-name-text">牛肉面</span>
-        <span class="dish-price-text">$12.24</span>
+        <span class="dish-price-text">$12</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">炒面条</span>
-        <span class="dish-price-text">$15.29</span>
+        <span class="dish-price-text">$15</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">炒面片</span>
-        <span class="dish-price-text">$15.29</span>
+        <span class="dish-price-text">$15</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">烩面片</span>
-        <span class="dish-price-text">$15.29</span>
+        <span class="dish-price-text">$15</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">杂酱面</span>
-        <span class="dish-price-text">$13.76</span>
+        <span class="dish-price-text">$14</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">豌杂面</span>
-        <span class="dish-price-text">$12.24</span>
+        <span class="dish-price-text">$12</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">凉面</span>
-        <span class="dish-price-text">$15.29</span>
+        <span class="dish-price-text">$15</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">浆水面</span>
-        <span class="dish-price-text">$12.24</span>
+        <span class="dish-price-text">$12</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">水饺</span>
-        <span class="dish-price-text">$15.29</span>
+        <span class="dish-price-text">$15</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">蛋炒饭</span>
-        <span class="dish-price-text">$12.24</span>
+        <span class="dish-price-text">$12</span>
       </div>
       <div class="dish-row">
         <span class="dish-name-text">加牛肉</span>
-        <span class="dish-price-text">$4.59</span>
+        <span class="dish-price-text">$5</span>
       </div>
       </div>
     </section>
@@ -916,7 +931,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">羊肉串</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -925,7 +940,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">牛肉串</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -934,7 +949,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">牛板筋</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -943,7 +958,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">熟牛筋</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
         <div class="dish-card">
@@ -952,7 +967,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">牛心管</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -961,7 +976,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">烤羊排</div>
-            <div class="dish-price">$42.82</div>
+            <div class="dish-price">$43</div>
           </div>
         </div>
         <div class="dish-card">
@@ -970,7 +985,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">羊腰</div>
-            <div class="dish-price">$7.65</div>
+            <div class="dish-price">$8</div>
           </div>
         </div>
       </div>
@@ -988,7 +1003,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡爪</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -997,7 +1012,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡脖</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1006,7 +1021,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡腿</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1015,7 +1030,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">翅中</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1024,7 +1039,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">骨肉相连</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1033,7 +1048,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鸡柳</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1042,7 +1057,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鸽子</div>
-            <div class="dish-price">$27.53</div>
+            <div class="dish-price">$28</div>
           </div>
         </div>
       </div>
@@ -1060,7 +1075,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">五花肉</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1069,7 +1084,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">肥肠</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1078,7 +1093,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">猪蹄</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1087,7 +1102,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">风干大油边</div>
-            <div class="dish-price">$9.18</div>
+            <div class="dish-price">$9</div>
           </div>
         </div>
       </div>
@@ -1105,7 +1120,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">马步鱼干</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1114,7 +1129,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鲜墨鱼</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1123,7 +1138,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">小黄花鱼</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1132,7 +1147,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">大虾</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1141,7 +1156,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">手撕鱿鱼干</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
       </div>
@@ -1159,7 +1174,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">土豆片</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1168,7 +1183,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">培根金针菇</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1177,7 +1192,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼子丸</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1186,7 +1201,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">虾子丸</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1195,7 +1210,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">鱼豆腐</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1204,7 +1219,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">千叶豆腐</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1213,7 +1228,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">尖椒</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1222,7 +1237,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">韭菜</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1231,7 +1246,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">菜花</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1240,7 +1255,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">菜卷</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1249,7 +1264,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">莲藕片</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1258,7 +1273,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">茄子</div>
-            <div class="dish-price">$7.65</div>
+            <div class="dish-price">$8</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1267,7 +1282,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">年糕</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1276,7 +1291,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">馒头片</div>
-            <div class="dish-price">$1.53</div>
+            <div class="dish-price">$2</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1285,14 +1300,14 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">烤面筋</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
       </div>
       <div class="dish-list">
       <div class="dish-row">
         <span class="dish-name-text">大蒜</span>
-        <span class="dish-price-text">$1.53</span>
+        <span class="dish-price-text">$2</span>
       </div>
       </div>
     </section>
@@ -1309,7 +1324,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">热狗肠</div>
-            <div class="dish-price">$4.59</div>
+            <div class="dish-price">$5</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1318,7 +1333,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">火腿肠</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1327,7 +1342,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">脆骨肠</div>
-            <div class="dish-price">$3.06</div>
+            <div class="dish-price">$3</div>
           </div>
         </div>
       </div>
@@ -1345,7 +1360,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">锡纸金针菇</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1354,7 +1369,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">锡纸花甲</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
         <div class="dish-card">
@@ -1363,7 +1378,7 @@
           </div>
           <div class="dish-info">
             <div class="dish-name">锡纸鸭血</div>
-            <div class="dish-price">$22.94</div>
+            <div class="dish-price">$23</div>
           </div>
         </div>
       </div>
@@ -1379,6 +1394,27 @@
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部">⬆</button>
 
   <script>
+    // 防止缓存 - 每次加载都获取最新版本
+    (function() {
+      const now = new Date().getTime();
+      const cacheKey = 'xmtx_menu_version';
+      const lastVersion = localStorage.getItem(cacheKey);
+      
+      if (lastVersion !== now.toString()) {
+        // 版本不同，清除所有缓存
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // 更新版本
+        localStorage.setItem(cacheKey, now.toString());
+        
+        // 强制刷新
+        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({type: 'SKIP_WAITING'});
+        }
+      }
+    })();
+
     // 搜索功能
     function searchDishes(keyword) {
       const kw = keyword.trim().toLowerCase();
